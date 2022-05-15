@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:todo/core/themes.dart';
 
 import 'dependency_injection.dart' as di;
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {});
     });
     super.initState();
+    FlutterNativeSplash.remove();
   }
 
   @override
@@ -63,8 +65,15 @@ class _MyAppState extends State<MyApp> {
         stream: FirebaseAuth.instance.userChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
-            return HomePage(user: snapshot.data!);
+            BlocProvider.of<ProjectBloc>(context)
+                .stream
+                .isEmpty
+                .then((isEmpty) {
+              if (isEmpty) {
+                BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
+              }
+              return HomePage(user: snapshot.data!);
+            });
           }
           return const AuthenticatePage(
             child: dartz.Left(SignInPage()),

@@ -45,7 +45,7 @@ class CustomTheme extends ChangeNotifier {
   ThemeData get darkTheme => ThemeData(
         fontFamily: GoogleFonts.poppins().fontFamily,
         colorScheme: kDarkColorScheme,
-        scaffoldBackgroundColor: kDarkColorScheme.background.withOpacity(.6),
+        scaffoldBackgroundColor: kDarkColorScheme.background,
         errorColor: kDarkColorScheme.error,
         splashColor: kDarkColorScheme.secondary,
         appBarTheme: AppBarTheme(

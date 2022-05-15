@@ -14,7 +14,8 @@ class FirebaseAuthenticator implements Authenticator {
   @override
   Future<User> googleSignIn() async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignInInstance.signIn();
+      final GoogleSignInAccount? googleUser =
+          await _googleSignInInstance.signIn();
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
@@ -74,7 +75,7 @@ class FirebaseAuthenticator implements Authenticator {
   @override
   Future<void> signOut() async {
     try {
-      if(_googleSignInInstance.currentUser!= null){
+      if (_googleSignInInstance.currentUser != null) {
         _googleSignInInstance.disconnect();
       }
       firebaseAuthInstance.signOut();
