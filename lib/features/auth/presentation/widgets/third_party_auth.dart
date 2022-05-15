@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/constants.dart';
 import '../bloc/auth_bloc.dart';
 
 class ThirdPartyAuth extends StatelessWidget {
@@ -23,7 +22,7 @@ class ThirdPartyAuth extends StatelessWidget {
             },
             child: const FaIcon(
               FontAwesomeIcons.google,
-              color: kSecondaryColor,
+              // color: kSecondaryColor,
             ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -36,7 +35,7 @@ class ThirdPartyAuth extends StatelessWidget {
             onPressed: () {},
             child: const FaIcon(
               FontAwesomeIcons.facebookF,
-              color: kSecondaryColor,
+              // color: kSecondaryColor,
             ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -49,7 +48,7 @@ class ThirdPartyAuth extends StatelessWidget {
             onPressed: () {},
             child: const FaIcon(
               FontAwesomeIcons.at,
-              color: kSecondaryColor,
+              // color: kSecondaryColor,
             ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(

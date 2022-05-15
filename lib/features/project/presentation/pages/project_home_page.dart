@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/constants.dart';
 import '../../domain/entities/project.dart';
 
 class ProjectHomePage extends StatelessWidget {
@@ -18,21 +17,22 @@ class ProjectHomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             FaIcon(
               FontAwesomeIcons.listCheck,
               size: 64,
-              color: kAccentColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
               "No projects to show.",
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: kAccentColor),
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ],
         ),

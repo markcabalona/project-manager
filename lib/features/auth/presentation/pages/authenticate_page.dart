@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/core/presentation/widgets/theme_mode_iconbutton.dart';
 
-import '../../../../core/constants.dart';
 import '../../../project/presentation/bloc/project_bloc.dart';
 import '../../../project/presentation/pages/homepage.dart';
 import '../bloc/auth_bloc.dart';
@@ -50,7 +50,7 @@ class AuthenticatePage extends StatelessWidget {
                     Text(authState.message),
                   ],
                 ),
-                backgroundColor: kAccentColor,
+                // backgroundColor: Theme.of(context).colorScheme.,
               ),
             );
         } else if (authState is AuthError) {
@@ -60,7 +60,6 @@ class AuthenticatePage extends StatelessWidget {
             ..showSnackBar(
               SnackBar(
                 content: Text(authState.error),
-                backgroundColor: kAccentColor,
               ),
             );
         } else if (authState is Authenticated) {
@@ -69,7 +68,6 @@ class AuthenticatePage extends StatelessWidget {
             ..showSnackBar(
               SnackBar(
                 content: Text(_successMessage),
-                backgroundColor: kAccentColor,
               ),
             );
         } else {
@@ -84,7 +82,21 @@ class AuthenticatePage extends StatelessWidget {
           BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
           return HomePage(user: authState.user);
         }
-        return _child;
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              ThemeModeIconButton(
+                lightThemeColor: _child is SignUpPage
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+              ),
+            ],
+          ),
+          body: _child,
+        );
       },
     );
   }

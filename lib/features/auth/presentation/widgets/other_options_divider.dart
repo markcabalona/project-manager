@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants.dart';
-
 class OtherOptionsDivider extends StatelessWidget {
   final String title;
 
@@ -20,8 +18,8 @@ class OtherOptionsDivider extends StatelessWidget {
           children: [
             const Expanded(
               child: Divider(
-                color: kPrimaryColor,
-              ),
+                  // color: kPrimaryColor,
+                  ),
             ),
             const SizedBox(
               width: 10,
@@ -34,8 +32,8 @@ class OtherOptionsDivider extends StatelessWidget {
             ),
             const Expanded(
               child: Divider(
-                color: kPrimaryColor,
-              ),
+                  // color: kPrimaryColor,
+                  ),
             ),
           ],
         ),

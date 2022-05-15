@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../constants.dart';
-
 class CustomErrorWidget extends StatelessWidget {
   final String errorMessage;
   const CustomErrorWidget({
@@ -12,7 +10,7 @@ class CustomErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kSecondaryColor,
+      // backgroundColor: kSecondaryColor,
       body: Center(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -20,7 +18,7 @@ class CustomErrorWidget extends StatelessWidget {
         children: [
           const Icon(
             Icons.error_outline,
-            color: kAccentColor,
+            // color: kAccentColor,
             size: 48,
           ),
           const SizedBox(
@@ -28,7 +26,7 @@ class CustomErrorWidget extends StatelessWidget {
           ),
           Text(
             errorMessage,
-            style: const TextStyle(color: kAccentColor),
+            // style: const TextStyle(color: kAccentColor),
           ),
         ],
       )),

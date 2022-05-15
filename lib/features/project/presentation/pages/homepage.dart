@@ -1,6 +1,8 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/core/presentation/widgets/theme_mode_iconbutton.dart';
 
 import '../../../../core/presentation/widgets/error_widget.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
@@ -26,6 +28,7 @@ class HomePage extends StatelessWidget {
             },
             icon: const Icon(Icons.logout),
           ),
+          const ThemeModeIconButton(),
         ],
       ),
       body: BlocBuilder<ProjectBloc, ProjectState>(

@@ -1,11 +1,10 @@
-import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:todo/core/themes.dart';
 
-import 'core/constants.dart';
 import 'dependency_injection.dart' as di;
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/authenticate_page.dart';
@@ -36,23 +35,30 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    customTheme.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Project Manager',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: kPrimaryColor,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-        textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: kPrimaryColor,
-              displayColor: kPrimaryColor,
-            ),
-      ),
+      theme: customTheme.lightTheme,
+      darkTheme: customTheme.darkTheme,
+      themeMode: customTheme.currentTheme,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.userChanges(),
         builder: (context, snapshot) {
@@ -61,15 +67,15 @@ class MyApp extends StatelessWidget {
             return HomePage(user: snapshot.data!);
           }
           return const AuthenticatePage(
-            child: Left(SignInPage()),
+            child: dartz.Left(SignInPage()),
           );
         },
       ),
       routes: {
         '/signIn': (context) =>
-            const AuthenticatePage(child: Left(SignInPage())),
+            const AuthenticatePage(child: dartz.Left(SignInPage())),
         '/signUp': (context) =>
-            const AuthenticatePage(child: Right(SignUpPage())),
+            const AuthenticatePage(child: dartz.Right(SignUpPage())),
       },
     );
   }

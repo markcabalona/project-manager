@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants.dart';
 import '../../../../core/domain/usecases/usecase_params.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -45,16 +44,13 @@ class _SignInFormState extends State<SignInForm> {
             validator: (val) => _usernameValidator(val),
             decoration: InputDecoration(
               filled: true,
-              fillColor: kSecondaryColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.person,
-                color: kPrimaryColor.withOpacity(.5),
               ),
               hintText: "Enter Username",
-              hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
               label: const Text("Username"),
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -68,16 +64,15 @@ class _SignInFormState extends State<SignInForm> {
             obscureText: true,
             decoration: InputDecoration(
               filled: true,
-              fillColor: kSecondaryColor,
+              // fillColor: kSecondaryColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.lock,
-                color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
               hintText: "Enter Password",
-              hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
+
               label: const Text("Password"),
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -102,9 +97,6 @@ class _SignInFormState extends State<SignInForm> {
               },
               child: const Text(
                 "Login",
-                style: TextStyle(
-                  color: kSecondaryColor,
-                ),
               ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants.dart';
 import '../../../../core/domain/usecases/usecase_params.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -48,16 +47,16 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: (val) => _usernameValidator(val),
             decoration: InputDecoration(
               filled: true,
-              fillColor: kSecondaryColor,
+              // fillColor: kSecondaryColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.person,
-                color: kPrimaryColor.withOpacity(.5),
+                // color: kPrimaryColor.withOpacity(.5),
               ),
               hintText: "Enter Username",
-              hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
+              // hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
               label: const Text("Username"),
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -70,16 +69,15 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: (val) => _passwordValidator(val),
             decoration: InputDecoration(
               filled: true,
-              fillColor: kSecondaryColor,
+              // fillColor: kSecondaryColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.lock,
-                color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
               hintText: "Enter Password",
-              hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
+              // hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
               label: const Text("Password"),
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -92,16 +90,13 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: (val) => _passwordValidator(val),
             decoration: InputDecoration(
               filled: true,
-              fillColor: kSecondaryColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.lock,
-                color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
               hintText: "Re-enter Password",
-              hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
               label: const Text("Confirm Password"),
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -126,9 +121,7 @@ class _SignUpFormState extends State<SignUpForm> {
               },
               child: const Text(
                 "Create Account",
-                style: TextStyle(
-                  color: kSecondaryColor,
-                ),
+                style: TextStyle(),
               ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
