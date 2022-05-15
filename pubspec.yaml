@@ -32,6 +32,11 @@ dependencies:
   google_fonts: ^2.3.2
   font_awesome_flutter: ^10.1.0
   cloud_firestore: ^3.1.14
+  flutter_native_splash: ^2.1.6
+
+flutter_native_splash:
+  color: "#4F56A9"
+  image: assets/images/logo-light.png
 
 dev_dependencies:
   flutter_test:

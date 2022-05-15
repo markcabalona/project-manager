@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:todo/features/project/presentation/widgets/project_tile.dart';
 
 import '../../domain/entities/project.dart';
 
@@ -41,16 +42,19 @@ class ProjectHomePage extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Active Projects"),
-          ...projects.map((project) {
-            if (project.isFinished) {
-              return const SizedBox();
-            }
-            return ListTile(
-              title: Text(project.title),
-            );
-          }),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Active Projects",
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          ...projects.where((proj) => !proj.isFinished).map(
+                (unfinishedProj) => ProjectTile(project: unfinishedProj),
+              )
         ],
       ),
     );

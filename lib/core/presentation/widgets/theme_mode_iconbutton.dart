@@ -31,7 +31,9 @@ class _ThemeModeIconButtonState extends State<ThemeModeIconButton> {
         customTheme.toggleTheme();
       },
       icon: customTheme.currentTheme == ThemeMode.dark
-          ? const Icon(Icons.nightlight_outlined)
+          ? const Icon(
+              Icons.nightlight_outlined,
+            )
           : Icon(
               Icons.sunny,
               color: widget.lightThemeColor,

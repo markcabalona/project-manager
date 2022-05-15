@@ -1,8 +1,8 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/core/presentation/widgets/theme_mode_iconbutton.dart';
+import 'package:todo/core/themes.dart';
 
 import '../../../../core/presentation/widgets/error_widget.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
@@ -20,16 +20,34 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.displayName ?? user.email ?? "Anonymous"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
-            },
-            icon: const Icon(Icons.logout),
+        leading: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Center(
+            child: Image.asset(
+              'assets/images/${customTheme.currentTheme == ThemeMode.light ? 'logo-light' : 'logo-dark'}.png',
+            ),
           ),
-          const ThemeModeIconButton(),
-        ],
+        ),
+        title: const Center(
+          child: Text(
+            "Projects",
+          ),
+        ),
+      ),
+      endDrawer: Drawer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
+              },
+              icon: const Icon(Icons.logout),
+            ),
+            const ThemeModeIconButton(),
+          ],
+        ),
       ),
       body: BlocBuilder<ProjectBloc, ProjectState>(
         builder: (context, state) {

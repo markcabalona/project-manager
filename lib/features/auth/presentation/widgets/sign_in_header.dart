@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:todo/core/themes.dart';
 
 class SignInHeader extends StatelessWidget {
   const SignInHeader({Key? key}) : super(key: key);
@@ -12,14 +13,15 @@ class SignInHeader extends StatelessWidget {
       children: [
         CustomPaint(
           size: const Size.fromHeight(260),
-          painter: HeaderPainter(
-            color: Theme.of(context).colorScheme.primary
-          ),
+          painter: HeaderPainter(color: Theme.of(context).colorScheme.primary),
         ),
-        Image.asset(
-          'assets/images/logo.png',
-          width: 128,
-          height: 140,
+        Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: Image.asset(
+            'assets/images/${customTheme.currentTheme == ThemeMode.light ? 'logo-light' : 'logo-dark'}.png',
+            width: 128,
+            height: 140,
+          ),
         ),
       ],
     );
@@ -34,7 +36,7 @@ class HeaderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var rectPaint = Paint()..color=color;
+    var rectPaint = Paint()..color = color;
 
     Size _rectSize = Size(size.width, size.height - 80);
 
