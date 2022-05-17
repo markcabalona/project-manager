@@ -95,13 +95,13 @@ class _SignInFormState extends State<SignInForm> {
                   );
                 }
               },
-              child: const Text(
-                "Login",
-              ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
+              ),
+              child: const Text(
+                "Login",
               ),
             ),
           ),

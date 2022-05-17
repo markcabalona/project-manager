@@ -119,14 +119,14 @@ class _SignUpFormState extends State<SignUpForm> {
                   );
                 }
               },
-              child: const Text(
-                "Create Account",
-                style: TextStyle(),
-              ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
+              ),
+              child: const Text(
+                "Create Account",
+                style: TextStyle(),
               ),
             ),
           ),

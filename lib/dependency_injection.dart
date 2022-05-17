@@ -24,7 +24,7 @@ final GetIt sl = GetIt.instance;
 void init() {
   // FirebaseAuth
   // BloC
-  sl.registerFactory(
+  sl.registerFactory<AuthBloc>(
     () => AuthBloc(
       signIn: sl<SignIn>(),
       signUp: sl<SignUp>(),
@@ -67,7 +67,7 @@ void init() {
     () => FirebaseAuthenticator(),
   );
 
-  sl.registerFactory(
+  sl.registerFactory<ProjectBloc>(
     () => ProjectBloc(
       createProject: sl<CreateProject>(),
       fetchProjects: sl<FetchProjects>(),

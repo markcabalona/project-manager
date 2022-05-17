@@ -9,10 +9,8 @@ class CustomErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: kSecondaryColor,
-      body: Center(
-          child: Column(
+    return Center(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -29,7 +27,7 @@ class CustomErrorWidget extends StatelessWidget {
             // style: const TextStyle(color: kAccentColor),
           ),
         ],
-      )),
+      ),
     );
   }
 }

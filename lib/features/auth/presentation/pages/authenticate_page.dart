@@ -19,17 +19,17 @@ class AuthenticatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late String _successMessage;
-    late Widget _child;
+    late String successMessage;
+    late Widget body;
 
     child.fold(
       (signIn) {
-        _successMessage = "Logged In";
-        _child = const SignInPage();
+        successMessage = "Logged In";
+        body = const SignInPage();
       },
       (signUp) {
-        _successMessage = "Account Created";
-        _child = const SignUpPage();
+        successMessage = "Account Created";
+        body = const SignUpPage();
       },
     );
     return BlocConsumer<AuthBloc, AuthState>(
@@ -42,9 +42,9 @@ class AuthenticatePage extends StatelessWidget {
                 content: Row(
                   children: [
                     const SizedBox(
-                      child: CircularProgressIndicator(strokeWidth: 2),
                       height: 20,
                       width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
                     ),
                     const SizedBox(width: 20),
                     Text(authState.message),
@@ -67,7 +67,7 @@ class AuthenticatePage extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(_successMessage),
+                content: Text(successMessage),
               ),
             );
         } else {
@@ -77,8 +77,8 @@ class AuthenticatePage extends StatelessWidget {
       builder: (context, authState) {
         if (authState is Authenticated) {
           // set _child to SignInPage so that user will redirect to SignInPage on logout event
-          _child = const SignInPage();
-          _successMessage = "Logged In";
+          body = const SignInPage();
+          successMessage = "Logged In";
           BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
           return HomePage(user: authState.user);
         }
@@ -89,13 +89,13 @@ class AuthenticatePage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             actions: [
               ThemeModeIconButton(
-                lightThemeColor: _child is SignUpPage
+                lightThemeColor: body is SignUpPage
                     ? Theme.of(context).colorScheme.primary
                     : null,
               ),
             ],
           ),
-          body: _child,
+          body: body,
         );
       },
     );

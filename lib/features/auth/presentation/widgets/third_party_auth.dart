@@ -20,41 +20,41 @@ class ThirdPartyAuth extends StatelessWidget {
                 GoogleSignInEvent(),
               );
             },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+              fixedSize: const Size(60, 60),
+            ),
             child: const FaIcon(
               FontAwesomeIcons.google,
               // color: kSecondaryColor,
             ),
+          ),
+          ElevatedButton(
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
               fixedSize: const Size(60, 60),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
             child: const FaIcon(
               FontAwesomeIcons.facebookF,
               // color: kSecondaryColor,
             ),
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100),
-              ),
-              fixedSize: const Size(60, 60),
-            ),
           ),
           ElevatedButton(
             onPressed: () {},
-            child: const FaIcon(
-              FontAwesomeIcons.at,
-              // color: kSecondaryColor,
-            ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
               fixedSize: const Size(60, 60),
+            ),
+            child: const FaIcon(
+              FontAwesomeIcons.at,
+              // color: kSecondaryColor,
             ),
           ),
         ],

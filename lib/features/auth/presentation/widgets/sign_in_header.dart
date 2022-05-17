@@ -38,18 +38,18 @@ class HeaderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var rectPaint = Paint()..color = color;
 
-    Size _rectSize = Size(size.width, size.height - 80);
+    Size rectSize = Size(size.width, size.height - 80);
 
     canvas.drawRect(
-      const Offset(0, 0) & _rectSize,
+      const Offset(0, 0) & rectSize,
       rectPaint,
     );
-    Size _ovalSize =
-        Size(size.width + 60, (size.height - _rectSize.height) * 2);
+    Size ovalSize =
+        Size(size.width + 60, (size.height - rectSize.height) * 2);
     canvas.drawArc(
-      Offset(-(_ovalSize.width - size.width) / 2,
-              size.height - _ovalSize.height) &
-          _ovalSize,
+      Offset(-(ovalSize.width - size.width) / 2,
+              size.height - ovalSize.height) &
+          ovalSize,
       math.pi,
       -math.pi,
       true,

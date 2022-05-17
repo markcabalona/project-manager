@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -23,7 +24,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     required this.deleteProject,
   }) : super(LoadingProject()) {
     on<CreateProjectEvent>((event, emit) async {
-      final _proj = (state as ProjectsLoaded).projects;
+      final proj = (state as ProjectsLoaded).projects;
       emit(LoadingProject());
 
       final result = await createProject(event.newProj);
@@ -31,10 +32,11 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       result.fold(
         (failure) {
           emit(ProjectError(errorMessage: failure.message));
-          emit(ProjectsLoaded(projects: _proj));
+          emit(ProjectsLoaded(projects: proj));
         },
         (project) {
           emit(ProjectCreated(newProject: project));
+          emit(ProjectsLoaded(projects: proj));
         },
       );
     });

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/project.dart';
@@ -14,18 +13,34 @@ class ProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {},
-      title: Text(project.title),
-      subtitle: Text(project.description),
+      leading: project.isFinished ? const Icon(Icons.done_rounded) : null,
+      title: Text(
+        project.title,
+        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      subtitle: Text(
+        project.description,
+        maxLines: 3,
+        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+              height: 1,
+              fontStyle: FontStyle.italic,
+              overflow: TextOverflow.ellipsis,
+            ),
+      ),
       trailing: SizedBox(
         width: 96,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconButton(
-              onPressed: () {
-                // TODO: call edit project
-              },
-              icon: const Icon(Icons.edit_outlined),
-            ),
+            if (!project.isFinished)
+              IconButton(
+                onPressed: () {
+                  // TODO: call edit project
+                },
+                icon: const Icon(Icons.edit_outlined),
+              ),
             IconButton(
               onPressed: () {
                 //TODO: call delete project

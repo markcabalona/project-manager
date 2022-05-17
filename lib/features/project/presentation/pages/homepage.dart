@@ -1,13 +1,15 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:todo/core/presentation/widgets/theme_mode_iconbutton.dart';
-import 'package:todo/core/themes.dart';
+import 'package:todo/features/project/presentation/widgets/custom_appbar_leading.dart';
 
 import '../../../../core/presentation/widgets/error_widget.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../bloc/project_bloc.dart';
-import 'project_home_page.dart';
+import '../widgets/homepage_body.dart';
 
 class HomePage extends StatelessWidget {
   final User user;
@@ -16,18 +18,13 @@ class HomePage extends StatelessWidget {
     required this.user,
   }) : super(key: key);
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Center(
-            child: Image.asset(
-              'assets/images/${customTheme.currentTheme == ThemeMode.light ? 'logo-light' : 'logo-dark'}.png',
-            ),
-          ),
-        ),
+        leading: const CustomAppBarLeading(),
         title: const Center(
           child: Text(
             "Projects",
@@ -49,15 +46,20 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: BlocBuilder<ProjectBloc, ProjectState>(
-        builder: (context, state) {
-          if (state is ProjectsLoaded) {
-            return ProjectHomePage(projects: state.projects);
-          } else if (state is ProjectError) {
-            return CustomErrorWidget(errorMessage: state.errorMessage);
-          }
-          return const Center(child: CircularProgressIndicator());
+      body: RefreshIndicator(
+        onRefresh: () async {
+          BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
         },
+        child: BlocBuilder<ProjectBloc, ProjectState>(
+          builder: (context, state) {
+            if (state is LoadingProject) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ProjectError) {
+              return CustomErrorWidget(errorMessage: state.errorMessage);
+            }
+            return HomePageBody(projects: (state as ProjectsLoaded).projects);
+          },
+        ),
       ),
     );
   }

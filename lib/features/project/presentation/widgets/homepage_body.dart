@@ -4,9 +4,9 @@ import 'package:todo/features/project/presentation/widgets/project_tile.dart';
 
 import '../../domain/entities/project.dart';
 
-class ProjectHomePage extends StatelessWidget {
+class HomePageBody extends StatelessWidget {
   final List<Project> projects;
-  const ProjectHomePage({
+  const HomePageBody({
     Key? key,
     required this.projects,
   }) : super(key: key);
@@ -39,22 +39,46 @@ class ProjectHomePage extends StatelessWidget {
         ),
       );
     }
-
+    List<Project> activeProjs =
+        projects.where((proj) => !proj.isFinished).toList();
+    List<Project> finishedProjs =
+        projects.where((proj) => proj.isFinished).toList();
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Active Projects",
-              style: Theme.of(context).textTheme.headlineSmall,
+          if (activeProjs.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Active Projects",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
-          ),
-          ...projects.where((proj) => !proj.isFinished).map(
-                (unfinishedProj) => ProjectTile(project: unfinishedProj),
-              )
+            ...activeProjs.map(
+              (unfinishedProj) => ProjectTile(project: unfinishedProj),
+            )
+          ] else ...[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "No Active Projects",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+          ],
+          if (finishedProjs.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Finished Projects",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+            ...finishedProjs
+                .map((finishedProj) => ProjectTile(project: finishedProj))
+          ]
         ],
       ),
     );
