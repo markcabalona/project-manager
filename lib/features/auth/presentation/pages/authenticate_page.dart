@@ -76,10 +76,9 @@ class AuthenticatePage extends StatelessWidget {
       },
       builder: (context, authState) {
         if (authState is Authenticated) {
-          // set _child to SignInPage so that user will redirect to SignInPage on logout event
+          // set body to SignInPage so that user will redirect to SignInPage on logout event
           body = const SignInPage();
           successMessage = "Logged In";
-          BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
           return HomePage(user: authState.user);
         }
         return Scaffold(

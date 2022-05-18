@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,9 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:todo/core/presentation/widgets/error_widget.dart';
-import 'package:todo/core/themes.dart';
 
+import 'core/themes.dart';
 import 'dependency_injection.dart' as di;
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/authenticate_page.dart';
@@ -48,11 +48,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    customTheme.addListener(() {
+    customTheme.addListener(() async {
       setState(() {});
     });
     super.initState();
-    FlutterNativeSplash.remove();
   }
 
   @override
@@ -63,35 +62,35 @@ class _MyAppState extends State<MyApp> {
       theme: customTheme.lightTheme,
       darkTheme: customTheme.darkTheme,
       themeMode: customTheme.currentTheme,
-      home: StreamBuilder<User?>(
-        initialData: FirebaseAuth.instance.currentUser,
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) {
-              BlocProvider.of<ProjectBloc>(context).add(FetchProjectsEvent());
-              return HomePage(user: snapshot.data!);
-            } else {
-              return const AuthenticatePage(
-                child: dartz.Left(SignInPage()),
-              );
-            }
-          } else {
-            return const Center(
-              child: CustomErrorWidget(errorMessage: 'Connection breaks'),
-            );
-          }
-        },
-      ),
+      home: const MyHomePage(),
       routes: {
         '/signIn': (context) =>
             const AuthenticatePage(child: dartz.Left(SignInPage())),
         '/signUp': (context) =>
             const AuthenticatePage(child: dartz.Right(SignUpPage())),
+      },
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      initialData: FirebaseAuth.instance.currentUser,
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.active) {
+          return HomePage(user: snapshot.data!);
+        }
+        return const AuthenticatePage(
+          child: dartz.Left(SignInPage()),
+        );
       },
     );
   }

@@ -43,44 +43,42 @@ class HomePageBody extends StatelessWidget {
         projects.where((proj) => !proj.isFinished).toList();
     List<Project> finishedProjs =
         projects.where((proj) => proj.isFinished).toList();
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (activeProjs.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Active Projects",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (activeProjs.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Active Projects",
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            ...activeProjs.map(
-              (unfinishedProj) => ProjectTile(project: unfinishedProj),
-            )
-          ] else ...[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "No Active Projects",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+          ),
+          ...activeProjs.map(
+            (unfinishedProj) => ProjectTile(project: unfinishedProj),
+          ),
+        ] else ...[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "No Active Projects",
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-          ],
-          if (finishedProjs.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Finished Projects",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ),
-            ...finishedProjs
-                .map((finishedProj) => ProjectTile(project: finishedProj))
-          ]
+          ),
         ],
-      ),
+        if (finishedProjs.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Finished Projects",
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          ...finishedProjs
+              .map((finishedProj) => ProjectTile(project: finishedProj))
+        ]
+      ],
     );
   }
 }
