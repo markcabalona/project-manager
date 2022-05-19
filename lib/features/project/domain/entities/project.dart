@@ -20,4 +20,24 @@ class Project extends Task {
           lastUpdated: lastUpdated,
           isFinished: isFinished,
         );
+
+  Project copyWith({
+    String? projectId,
+    String? title,
+    String? description,
+    bool? isPriority,
+    DateTime? dateCreated,
+    DateTime? lastUpdated,
+    bool? isFinished,
+  }) {
+    return Project(
+      projectId: projectId ?? id,
+      projectTitle: title ?? this.title,
+      description: description ?? this.description,
+      isPriority: isPriority ?? this.isPriority,
+      dateCreated: dateCreated ?? this.dateCreated,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      isFinished: isFinished ?? this.isFinished,
+    );
+  }
 }

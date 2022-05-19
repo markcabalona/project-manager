@@ -1,10 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/features/project/domain/usecases/create_project.dart';
+import 'package:todo/features/project/presentation/bloc/project_bloc.dart';
 
 import '../../domain/entities/project.dart';
 
 class ProjectDialogForm extends StatelessWidget {
   final Project? project;
+
   const ProjectDialogForm({
     Key? key,
     this.project,
@@ -12,6 +15,7 @@ class ProjectDialogForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     final titleCtrl = TextEditingController(text: project?.title);
     final descCtrl = TextEditingController(text: project?.description);
 
@@ -34,6 +38,7 @@ class ProjectDialogForm extends StatelessWidget {
         ),
         child: SingleChildScrollView(
           child: Form(
+            key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -81,7 +86,32 @@ class ProjectDialogForm extends StatelessWidget {
                     Expanded(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          if (formKey.currentState!.validate()) {
+                            BlocProvider.of<ProjectBloc>(context).add(
+                              project == null
+                                  ? CreateProjectEvent(
+                                      newProj: CreateProjectParams(
+                                        title: titleCtrl.text,
+                                        description: descCtrl.text,
+                                        isPriority: false,
+                                      ),
+                                    )
+                                  : UpdateProjectEvent(
+                                      project: project!.copyWith(
+                                        title: titleCtrl.text,
+                                        description: descCtrl.text,
+                                      ),
+                                    ),
+                            );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text(project==null?"Creating project":"Updating project"),
+                                ),
+                              );
+                            Navigator.pop(context);
+                          }
                         },
                         style: TextButton.styleFrom(
                           backgroundColor:

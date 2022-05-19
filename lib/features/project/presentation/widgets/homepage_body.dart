@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:todo/features/project/presentation/bloc/project_bloc.dart';
 import 'package:todo/features/project/presentation/widgets/project_tile.dart';
 
 import '../../domain/entities/project.dart';
@@ -43,51 +45,74 @@ class HomePageBody extends StatelessWidget {
         projects.where((proj) => !proj.isFinished).toList();
     List<Project> finishedProjs =
         projects.where((proj) => proj.isFinished).toList();
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (activeProjs.isNotEmpty) ...[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              "Active Projects",
-              style: Theme.of(context).textTheme.headlineSmall,
+    return BlocConsumer<ProjectBloc, ProjectState>(listener: (context, state) {
+      if (state is ProjectError) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
             ),
-          ),
-          ...activeProjs.map(
-            (activeProj) => Padding(
-              padding:
-                  const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-              child: ProjectTile(project: activeProj),
+          );
+      }
+      if (state is ProjectCreated) {
+        projects.add(state.newProject);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text("${state.newProject.title} is created"),
             ),
-          ),
-        ] else ...[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              "No Active Projects",
-              style: Theme.of(context).textTheme.headlineSmall,
+          );
+      }
+    }, builder: (context, state) {
+      
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (activeProjs.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Active Projects",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
-          ),
+            ...activeProjs.map(
+              (activeProj) => Padding(
+                padding: const EdgeInsets.only(
+                    left: 10.0, right: 10.0, bottom: 10.0),
+                child: ProjectTile(project: activeProj),
+              ),
+            ),
+          ] else ...[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "No Active Projects",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+          ],
+          if (finishedProjs.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Finished Projects",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+            ...finishedProjs.map(
+              (finishedProj) => Padding(
+                padding: const EdgeInsets.only(
+                    left: 10.0, right: 10.0, bottom: 10.0),
+                child: ProjectTile(project: finishedProj),
+              ),
+            )
+          ]
         ],
-        if (finishedProjs.isNotEmpty) ...[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              "Finished Projects",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ),
-          ...finishedProjs.map(
-            (finishedProj) => Padding(
-              padding:
-                  const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-              child: ProjectTile(project: finishedProj),
-            ),
-          )
-        ]
-      ],
-    );
+      );
+    });
   }
 }

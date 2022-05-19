@@ -20,7 +20,7 @@ class CreateProjectParams {
   final String title;
   final String description;
   final bool isPriority;
-  CreateProjectParams({
+  const CreateProjectParams({
     required this.title,
     required this.description,
     required this.isPriority,

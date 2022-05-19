@@ -25,7 +25,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   }) : super(LoadingProject()) {
     on<CreateProjectEvent>((event, emit) async {
       final proj = (state as ProjectsLoaded).projects;
-      emit(LoadingProject());
 
       final result = await createProject(event.newProj);
 

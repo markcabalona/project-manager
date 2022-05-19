@@ -17,9 +17,9 @@ class FirebaseDatasource implements RemoteDatasource {
   Future<Project> createProject(CreateProjectParams newProj) async {
     final result = await _instance.collection('/projects').add(
           ProjectModel(
-            description: newProj.description,
+            description: newProj.description.isEmpty?'No Description':newProj.description,
             isPriority: newProj.isPriority,
-            projectTitle: newProj.title,
+            projectTitle: newProj.title.isEmpty?'Untitled':newProj.title,
           ).toMap()
             ..addEntries(
                 {'user_id': _firebaseAuthInstance.currentUser!.uid}.entries),
