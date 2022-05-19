@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../core/domain/usecases/usecase_params.dart';
 import '../bloc/auth_bloc.dart';
@@ -15,9 +16,15 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  late bool passwordDisplayed;
+
+  @override
+  void initState() {
+    passwordDisplayed = false;
+    super.initState();
+  }
 
   String? _usernameValidator(String? val) {
-    // TODO: Implement username validator
     if (val == null || val.isEmpty) {
       return "Field cannot be empty";
     }
@@ -25,7 +32,6 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   String? _passwordValidator(String? val) {
-    // TODO: Implement password validator
     if (val == null || val.isEmpty) {
       return "Field cannot be empty";
     }
@@ -42,17 +48,12 @@ class _SignInFormState extends State<SignInForm> {
           TextFormField(
             controller: _usernameCtrl,
             validator: (val) => _usernameValidator(val),
-            decoration: InputDecoration(
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              prefixIcon: const Icon(
+            decoration: const InputDecoration(
+              prefixIcon: Icon(
                 Icons.person,
               ),
               hintText: "Enter Username",
-              label: const Text("Username"),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: Text("Username"),
             ),
           ),
           const SizedBox(
@@ -61,20 +62,28 @@ class _SignInFormState extends State<SignInForm> {
           TextFormField(
             controller: _passwordCtrl,
             validator: (val) => _passwordValidator(val),
-            obscureText: true,
+            obscureText: !passwordDisplayed,
             decoration: InputDecoration(
-              filled: true,
-              // fillColor: kSecondaryColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
               prefixIcon: const Icon(
                 Icons.lock,
               ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: Icon(
+                    passwordDisplayed
+                        ? FontAwesomeIcons.eye
+                        : FontAwesomeIcons.eyeSlash,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      passwordDisplayed = !passwordDisplayed;
+                    });
+                  },
+                ),
+              ),
               hintText: "Enter Password",
-
               label: const Text("Password"),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           const SizedBox(

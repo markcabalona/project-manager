@@ -49,18 +49,22 @@ class HomePageBody extends StatelessWidget {
       children: [
         if (activeProjs.isNotEmpty) ...[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(
               "Active Projects",
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ...activeProjs.map(
-            (unfinishedProj) => ProjectTile(project: unfinishedProj),
+            (activeProj) => Padding(
+              padding:
+                  const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+              child: ProjectTile(project: activeProj),
+            ),
           ),
         ] else ...[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(
               "No Active Projects",
               style: Theme.of(context).textTheme.headlineSmall,
@@ -69,14 +73,19 @@ class HomePageBody extends StatelessWidget {
         ],
         if (finishedProjs.isNotEmpty) ...[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(
               "Finished Projects",
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
-          ...finishedProjs
-              .map((finishedProj) => ProjectTile(project: finishedProj))
+          ...finishedProjs.map(
+            (finishedProj) => Padding(
+              padding:
+                  const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+              child: ProjectTile(project: finishedProj),
+            ),
+          )
         ]
       ],
     );

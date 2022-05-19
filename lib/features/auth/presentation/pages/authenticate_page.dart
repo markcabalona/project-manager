@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/core/presentation/widgets/theme_mode_iconbutton.dart';
 
-import '../../../project/presentation/bloc/project_bloc.dart';
+import '../../../../core/presentation/widgets/theme_mode_iconbutton.dart';
 import '../../../project/presentation/pages/homepage.dart';
 import '../bloc/auth_bloc.dart';
 import 'sign_in_page.dart';
@@ -88,7 +87,7 @@ class AuthenticatePage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             actions: [
               ThemeModeIconButton(
-                lightThemeColor: body is SignUpPage
+                primaryColor: body is SignUpPage
                     ? Theme.of(context).colorScheme.primary
                     : null,
               ),

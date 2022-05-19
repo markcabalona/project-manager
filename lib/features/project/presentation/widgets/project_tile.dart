@@ -12,6 +12,9 @@ class ProjectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       onTap: () {},
       leading: project.isFinished ? const Icon(Icons.done_rounded) : null,
       title: Text(

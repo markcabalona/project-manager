@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:todo/core/lib_color_schemes.g.dart';
+
+import 'lib_color_schemes.g.dart';
 
 CustomTheme customTheme = CustomTheme();
 
@@ -40,6 +41,13 @@ class CustomTheme extends ChangeNotifier {
             fontWeight: FontWeight.w600,
           ),
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
       );
 
   ThemeData get darkTheme => ThemeData(
@@ -66,6 +74,13 @@ class CustomTheme extends ChangeNotifier {
           ),
           button: const TextStyle(
             fontWeight: FontWeight.w600,
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
       );

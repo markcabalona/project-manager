@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../core/domain/usecases/usecase_params.dart';
 import '../bloc/auth_bloc.dart';
@@ -17,8 +18,15 @@ class _SignUpFormState extends State<SignUpForm> {
   final _passwordCtrl = TextEditingController();
   final _confirmPasswordCtrl = TextEditingController();
 
+  late bool passwordDisplayed;
+
+  @override
+  void initState() {
+    passwordDisplayed = false;
+    super.initState();
+  }
+
   String? _usernameValidator(String? val) {
-    // TODO: Implement username validator
     if (val == null || val.isEmpty) {
       return "Field cannot be empty";
     }
@@ -26,9 +34,10 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   String? _passwordValidator(String? val) {
-    // TODO: Implement password validator
     if (val == null || val.isEmpty) {
       return "Field cannot be empty";
+    } else if (val.length < 6) {
+      return "Password must be atleast 6 characters";
     } else if (_passwordCtrl.text != _confirmPasswordCtrl.text) {
       return "Password does not match.";
     }
@@ -67,19 +76,28 @@ class _SignUpFormState extends State<SignUpForm> {
           TextFormField(
             controller: _passwordCtrl,
             validator: (val) => _passwordValidator(val),
+            obscureText: !passwordDisplayed,
             decoration: InputDecoration(
-              filled: true,
-              // fillColor: kSecondaryColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
               prefixIcon: const Icon(
                 Icons.lock,
               ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: Icon(
+                    passwordDisplayed
+                        ? FontAwesomeIcons.eye
+                        : FontAwesomeIcons.eyeSlash,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      passwordDisplayed = !passwordDisplayed;
+                    });
+                  },
+                ),
+              ),
               hintText: "Enter Password",
-              // hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
               label: const Text("Password"),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           const SizedBox(
@@ -88,17 +106,28 @@ class _SignUpFormState extends State<SignUpForm> {
           TextFormField(
             controller: _confirmPasswordCtrl,
             validator: (val) => _passwordValidator(val),
+            obscureText: !passwordDisplayed,
             decoration: InputDecoration(
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
               prefixIcon: const Icon(
                 Icons.lock,
               ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: Icon(
+                    passwordDisplayed
+                        ? FontAwesomeIcons.eye
+                        : FontAwesomeIcons.eyeSlash,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      passwordDisplayed = !passwordDisplayed;
+                    });
+                  },
+                ),
+              ),
               hintText: "Re-enter Password",
               label: const Text("Confirm Password"),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           const SizedBox(

@@ -18,29 +18,33 @@ class SignInPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SignInForm(),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const OtherOptionsDivider(
-            title: "Or Continue With",
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const ThirdPartyAuth(),
-          const SizedBox(
-            height: 20,
-          ),
-          AuthScreenNavigator(
-            hint: "Don't have an account yet?",
-            buttonLabel: "Sign Up",
-            callback: () {
-              Navigator.of(context).popAndPushNamed('/signUp');
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                const SignInForm(),
+                const SizedBox(
+                  height: 20,
+                ),
+                const OtherOptionsDivider(
+                  title: "Or Continue With",
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const ThirdPartyAuth(),
+                const SizedBox(
+                  height: 20,
+                ),
+                AuthScreenNavigator(
+                  hint: "Don't have an account yet?",
+                  buttonLabel: "Sign Up",
+                  callback: () {
+                    Navigator.of(context).popAndPushNamed('/signUp');
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),

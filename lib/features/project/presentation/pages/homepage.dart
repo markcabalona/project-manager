@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +8,7 @@ import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../bloc/project_bloc.dart';
 import '../widgets/custom_appbar_leading.dart';
 import '../widgets/homepage_body.dart';
+import '../widgets/project_dialog_form.dart';
 
 class HomePage extends StatelessWidget {
   final User user;
@@ -50,6 +49,28 @@ class HomePage extends StatelessWidget {
                   const ThemeModeIconButton(),
                 ],
               ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                showGeneralDialog(
+                  context: context,
+                  pageBuilder: (context, anim1, anim2) {
+                    return const ProjectDialogForm();
+                  },
+                  transitionBuilder: (context, anim1, anim2, child) {
+                    return Transform.scale(
+                      scale: anim1.value,
+                      origin: Offset(
+                        MediaQuery.of(context).size.width / 2,
+                        MediaQuery.of(context).size.height / 2,
+                      ),
+                      child: child,
+                    );
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                );
+              },
+              child: const Icon(Icons.add),
             ),
             body: SizedBox.expand(
               child: LayoutBuilder(

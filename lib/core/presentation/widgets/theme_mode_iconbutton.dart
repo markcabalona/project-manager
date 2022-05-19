@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:todo/core/themes.dart';
+import '../../themes.dart';
 
 class ThemeModeIconButton extends StatefulWidget {
-  final Color? lightThemeColor;
+  final Color? primaryColor;
   const ThemeModeIconButton({
     Key? key,
-    this.lightThemeColor,
+    this.primaryColor,
   }) : super(key: key);
 
   @override
@@ -31,12 +31,13 @@ class _ThemeModeIconButtonState extends State<ThemeModeIconButton> {
         customTheme.toggleTheme();
       },
       icon: customTheme.currentTheme == ThemeMode.dark
-          ? const Icon(
+          ? Icon(
               Icons.nightlight_outlined,
+              color: widget.primaryColor
             )
           : Icon(
               Icons.sunny,
-              color: widget.lightThemeColor,
+              color: widget.primaryColor,
             ),
     );
   }
