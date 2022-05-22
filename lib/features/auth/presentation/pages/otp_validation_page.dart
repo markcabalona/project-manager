@@ -16,16 +16,12 @@ class OTPValidationPage extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final otpCtrl = TextEditingController();
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.center,
-          constraints:
-              BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: formKey,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal:20.0,),
+            child: Form(
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +29,7 @@ class OTPValidationPage extends StatelessWidget {
                   const SizedBox(
                     height: 30,
                   ),
-                  Text('OTP has been send to ${user.email}'),
+                  Text('OTP has been send to ${user.email}',textAlign: TextAlign.center,),
                   const SizedBox(
                     height: 30,
                   ),
@@ -61,8 +57,7 @@ class OTPValidationPage extends StatelessWidget {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           BlocProvider.of<AuthBloc>(context).add(
-                            ValidateEmailOTPEvent(
-                                user: user, otp: otpCtrl.text),
+                            ValidateEmailOTPEvent(user: user, otp: otpCtrl.text),
                           );
                         }
                       },

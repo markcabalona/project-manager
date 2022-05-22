@@ -47,7 +47,12 @@ class AuthenticatePage extends StatelessWidget {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     ),
                     const SizedBox(width: 20),
-                    Text(authState.message),
+                    Expanded(
+                      child: Text(
+                        authState.message,
+                        maxLines: 3,
+                      ),
+                    ),
                   ],
                 ),
                 // backgroundColor: Theme.of(context).colorScheme.,
@@ -59,7 +64,10 @@ class AuthenticatePage extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(authState.error),
+                content: Text(
+                  authState.error,
+                  maxLines: 3,
+                ),
               ),
             );
         } else if (authState is AccountCreated) {
