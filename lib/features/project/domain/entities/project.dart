@@ -40,4 +40,14 @@ class Project extends Task {
       isFinished: isFinished ?? this.isFinished,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Project && other.id == id;
+  }
+
+  @override
+  int get hashCode => description.hashCode;
 }

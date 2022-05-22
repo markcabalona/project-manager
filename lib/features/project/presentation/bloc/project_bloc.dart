@@ -35,7 +35,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         },
         (project) {
           emit(ProjectCreated(newProject: project));
-          emit(ProjectsLoaded(projects: proj));
+          emit(ProjectsLoaded(projects: proj..add(project)));
         },
       );
     });
@@ -54,12 +54,46 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       );
     });
 
-    on<UpdateProjectEvent>((event, emit) {
-      emit(LoadingProject());
+    on<UpdateProjectEvent>((event, emit) async {
+      final proj = (state as ProjectsLoaded).projects;
+
+      final result = await updateProject(event.project);
+
+      result.fold(
+        (failure) {
+          emit(ProjectError(errorMessage: failure.message));
+          emit(ProjectsLoaded(projects: proj));
+        },
+        (project) {
+          proj[proj.indexOf(event.project)] = project;
+          emit(ProjectUpdated(updatedProject: project));
+          emit(ProjectsLoaded(projects: proj));
+        },
+      );
     });
 
-    on<DeleteProjectEvent>((event, emit) {
-      emit(LoadingProject());
+    on<DeleteProjectEvent>((event, emit) async {
+      final proj = (state as ProjectsLoaded).projects;
+
+      final result = await deleteProject(event.params);
+
+      result.fold(
+        (failure) {
+          emit(ProjectError(errorMessage: failure.message));
+          emit(ProjectsLoaded(projects: proj));
+        },
+        (_) {
+          emit(ProjectDeleted());
+          emit(
+            ProjectsLoaded(
+              projects: proj
+                ..removeWhere(
+                  (element) => element.id == event.params.projectId,
+                ),
+            ),
+          );
+        },
+      );
     });
   }
 }

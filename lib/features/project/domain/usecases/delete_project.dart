@@ -11,13 +11,13 @@ class DeleteProject implements Usecase<void, DeleteProjectParams> {
   });
   @override
   Future<Either<Failure, void>> call(DeleteProjectParams params) {
-    return repository.deleteProject(params.todoId);
+    return repository.deleteProject(params.projectId);
   }
 }
 
 class DeleteProjectParams {
-  final String todoId;
+  final String projectId;
   const DeleteProjectParams({
-    required this.todoId,
+    required this.projectId,
   });
 }

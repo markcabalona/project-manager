@@ -12,6 +12,6 @@ class UpdateProject implements Usecase<Project, Project> {
   });
   @override
   Future<Either<Failure, Project>> call(Project params) {
-    return repository.updateProject(params);
+    return repository.updateProject(params..copyWith(lastUpdated: DateTime.now()));
   }
 }

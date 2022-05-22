@@ -56,7 +56,6 @@ class HomePageBody extends StatelessWidget {
           );
       }
       if (state is ProjectCreated) {
-        projects.add(state.newProject);
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
@@ -65,8 +64,26 @@ class HomePageBody extends StatelessWidget {
             ),
           );
       }
+      if (state is ProjectUpdated) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(
+              content: Text("Project updated."),
+            ),
+          );
+      }
+      if (state is ProjectDeleted) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(
+              content: Text("Project deleted."),
+            ),
+          );
+      }
+      if (state is ProjectsLoaded) {}
     }, builder: (context, state) {
-      
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +127,10 @@ class HomePageBody extends StatelessWidget {
                 child: ProjectTile(project: finishedProj),
               ),
             )
-          ]
+          ],
+          const SizedBox(
+            height: 60,
+          ),
         ],
       );
     });

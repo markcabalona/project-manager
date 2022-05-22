@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/features/project/domain/usecases/delete_project.dart';
+import 'package:todo/features/project/presentation/bloc/project_bloc.dart';
+import 'package:todo/features/project/presentation/widgets/project_dialog_form.dart';
 
 import '../../domain/entities/project.dart';
 
@@ -11,11 +15,14 @@ class ProjectTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final editBtnKey = GlobalKey();
     return ListTile(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      onTap: () {},
+      onTap: () {
+        // TODO: Navigate to specific project page
+      },
       leading: project.isFinished ? const Icon(Icons.done_rounded) : null,
       title: Text(
         project.title,
@@ -39,14 +46,39 @@ class ProjectTile extends StatelessWidget {
           children: [
             if (!project.isFinished)
               IconButton(
+                key: editBtnKey,
                 onPressed: () {
-                  // TODO: call edit project
+                  final offset = (editBtnKey.currentContext?.findRenderObject()
+                          as RenderBox)
+                      .localToGlobal(Offset.zero);
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, anim1, anim2) {
+                      return ProjectDialogForm(project: project);
+                    },
+                    transitionBuilder: (context, anim1, anim2, child) {
+                      return Transform.scale(
+                        scaleY: anim1.value,
+                        origin: Offset(
+                          0,
+                          -((MediaQuery.of(context).size.height / 2) -
+                              offset.dy),
+                        ),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 300),
+                  );
                 },
                 icon: const Icon(Icons.edit_outlined),
               ),
             IconButton(
               onPressed: () {
-                //TODO: call delete project
+                BlocProvider.of<ProjectBloc>(context).add(
+                  DeleteProjectEvent(
+                    params: DeleteProjectParams(projectId: project.id),
+                  ),
+                );
               },
               icon: const Icon(Icons.delete_outline),
             ),
