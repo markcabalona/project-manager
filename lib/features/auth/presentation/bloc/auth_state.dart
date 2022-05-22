@@ -28,6 +28,27 @@ class Authenticated extends AuthState {
   List<Object> get props => super.props..add(user);
 }
 
+class AccountCreated extends AuthState {
+  final User user;
+  const AccountCreated({
+    required this.user,
+  });
+
+  @override
+  List<Object> get props => super.props..add(user);
+}
+
+class EmailOTPSent extends AuthState {
+  final User user;
+  const EmailOTPSent({
+    required this.user,
+  });
+  @override
+  List<Object> get props => super.props..add(user);
+}
+
+
+
 class AuthError extends AuthState {
   final String error;
 

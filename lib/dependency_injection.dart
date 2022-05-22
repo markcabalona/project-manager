@@ -5,9 +5,11 @@ import 'features/auth/data/datasources/firebase_authenticator.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/google_sign_in.dart';
+import 'features/auth/domain/usecases/send_email_otp.dart';
 import 'features/auth/domain/usecases/sign_in.dart';
 import 'features/auth/domain/usecases/sign_out.dart';
 import 'features/auth/domain/usecases/sign_up.dart';
+import 'features/auth/domain/usecases/validate_email_otp.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/project/data/datasources/firebase_datasource.dart';
 import 'features/project/data/datasources/remote_datasource.dart';
@@ -30,6 +32,8 @@ void init() {
       signUp: sl<SignUp>(),
       googleSignIn: sl<GoogleSignIn>(),
       signOut: sl<SignOut>(),
+      sendEmailOTP: sl<SendEmailOTP>(),
+      validateEmailOTP: sl<ValidateEmailOTP>(),
     ),
   );
 
@@ -51,6 +55,16 @@ void init() {
   );
   sl.registerLazySingleton<SignOut>(
     () => SignOut(
+      repository: sl<AuthRepository>(),
+    ),
+  );
+  sl.registerLazySingleton<SendEmailOTP>(
+    () => SendEmailOTP(
+      repository: sl<AuthRepository>(),
+    ),
+  );
+  sl.registerLazySingleton<ValidateEmailOTP>(
+    () => ValidateEmailOTP(
       repository: sl<AuthRepository>(),
     ),
   );

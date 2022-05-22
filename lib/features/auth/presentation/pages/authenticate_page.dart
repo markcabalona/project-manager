@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/presentation/widgets/theme_mode_iconbutton.dart';
 import '../../../project/presentation/pages/homepage.dart';
 import '../bloc/auth_bloc.dart';
+import 'otp_validation_page.dart';
 import 'sign_in_page.dart';
 import 'sign_up_page.dart';
 
@@ -61,6 +62,10 @@ class AuthenticatePage extends StatelessWidget {
                 content: Text(authState.error),
               ),
             );
+        } else if (authState is AccountCreated) {
+          BlocProvider.of<AuthBloc>(context).add(
+            SendEmailOTPEvent(user: authState.user),
+          );
         } else if (authState is Authenticated) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -79,6 +84,11 @@ class AuthenticatePage extends StatelessWidget {
           body = const SignInPage();
           successMessage = "Logged In";
           return HomePage(user: authState.user);
+        }
+        if (authState is EmailOTPSent) {
+          return OTPValidationPage(
+            user: authState.user,
+          );
         }
         return Scaffold(
           extendBodyBehindAppBar: true,

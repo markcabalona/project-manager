@@ -5,6 +5,7 @@ import '../../../../core/domain/usecases/usecase_params.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../../domain/usecases/send_email_otp.dart';
 import '../datasources/authenticator.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -58,6 +59,34 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(await authenticator.signOut());
     } on AuthException catch (exception) {
       return Left(AuthFailure(message: exception.message ?? "Sign Out Failed"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> sendEmailOTP(
+      EmailOTPParams emailOTPParams) async {
+    try {
+      return Right(await authenticator.sendEmailOTP(emailOTPParams));
+    } on AuthException catch (exception) {
+      return Left(
+        AuthFailure(
+            message: exception.message ??
+                "Unable to send OTP to ${emailOTPParams.user}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> validateEmailOTP(
+      EmailOTPParams emailOTPParams) async {
+    try {
+      return Right(await authenticator.validateEmailOTP(emailOTPParams));
+    } on AuthException catch (exception) {
+      return Left(
+        AuthFailure(
+            message: exception.message ??
+                "Invalid OTP"),
+      );
     }
   }
 }

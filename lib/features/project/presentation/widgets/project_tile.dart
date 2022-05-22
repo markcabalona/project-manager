@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/features/project/domain/usecases/delete_project.dart';
-import 'package:todo/features/project/presentation/bloc/project_bloc.dart';
-import 'package:todo/features/project/presentation/widgets/project_dialog_form.dart';
 
 import '../../domain/entities/project.dart';
+import '../../domain/usecases/delete_project.dart';
+import '../bloc/project_bloc.dart';
+import 'project_dialog_form.dart';
 
 class ProjectTile extends StatelessWidget {
   final Project project;

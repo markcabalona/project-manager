@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:todo/features/project/presentation/bloc/project_bloc.dart';
-import 'package:todo/features/project/presentation/widgets/project_tile.dart';
 
 import '../../domain/entities/project.dart';
+import '../bloc/project_bloc.dart';
+import 'project_tile.dart';
 
 class HomePageBody extends StatelessWidget {
   final List<Project> projects;

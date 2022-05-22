@@ -1,15 +1,18 @@
 import 'dart:developer';
 
+import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../core/domain/usecases/usecase_params.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../domain/usecases/send_email_otp.dart';
 import 'authenticator.dart';
 
 class FirebaseAuthenticator implements Authenticator {
   final FirebaseAuth firebaseAuthInstance = FirebaseAuth.instance;
   final _googleSignInInstance = GoogleSignIn();
+  final _emailAuthInstance = EmailAuth(sessionName: 'Project Manager');
 
   @override
   Future<User> googleSignIn() async {
@@ -81,6 +84,36 @@ class FirebaseAuthenticator implements Authenticator {
       firebaseAuthInstance.signOut();
     } on FirebaseException catch (e) {
       throw AuthException(message: e.message);
+    }
+  }
+
+  @override
+  Future<User> sendEmailOTP(EmailOTPParams emailOTPParams) async {
+    try {
+      final result = await _emailAuthInstance.sendOtp(
+          recipientMail: emailOTPParams.user.email!);
+      if (!result) {
+        throw const AuthException(message: "Unable to send OTP");
+      }
+      return emailOTPParams.user;
+    } catch (e) {
+      throw const AuthException(message: "Unable to send OTP");
+    }
+  }
+
+  @override
+  Future<User> validateEmailOTP(EmailOTPParams emailOTPParams) async {
+    try {
+      final result = _emailAuthInstance.validateOtp(
+        recipientMail: emailOTPParams.user.email!,
+        userOtp: emailOTPParams.otp!,
+      );
+      if (!result) {
+        throw const AuthException(message: "Invalid OTP");
+      }
+      return emailOTPParams.user;
+    } catch (e) {
+      throw const AuthException(message: "Invalid OTP");
     }
   }
 }

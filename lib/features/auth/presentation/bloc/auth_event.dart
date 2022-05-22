@@ -28,6 +28,26 @@ class SignUpEvent extends AuthEvent {
 
 class GoogleSignInEvent extends AuthEvent {}
 
-class CheckAuthStateEvent extends AuthEvent {}
+class SendEmailOTPEvent extends AuthEvent {
+  final User user;
+  const SendEmailOTPEvent({
+    required this.user,
+  });
+
+  @override
+  List<Object> get props => super.props..add(user);
+}
+
+class ValidateEmailOTPEvent extends AuthEvent {
+  final User user;
+  final String otp;
+  const ValidateEmailOTPEvent({
+    required this.user,
+    required this.otp,
+  });
+
+  @override
+  List<Object> get props => super.props..addAll([user, otp]);
+}
 
 class SignOutEvent extends AuthEvent {}

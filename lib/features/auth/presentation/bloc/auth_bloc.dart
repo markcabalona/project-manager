@@ -2,6 +2,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo/features/auth/domain/usecases/send_email_otp.dart';
+import 'package:todo/features/auth/domain/usecases/validate_email_otp.dart';
 
 import '../../../../core/domain/usecases/usecase_params.dart';
 import '../../domain/usecases/google_sign_in.dart';
@@ -17,11 +19,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignUp signUp;
   final GoogleSignIn googleSignIn;
   final SignOut signOut;
+  final SendEmailOTP sendEmailOTP;
+  final ValidateEmailOTP validateEmailOTP;
   AuthBloc({
     required this.signIn,
     required this.signUp,
     required this.googleSignIn,
     required this.signOut,
+    required this.sendEmailOTP,
+    required this.validateEmailOTP,
   }) : super(UnAuthenticated()) {
     on<SignInEvent>((event, emit) async {
       emit(const AuthLoading(
@@ -53,7 +59,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(UnAuthenticated());
         },
         (user) => emit(
-          Authenticated(user: user),
+          AccountCreated(user: user),
         ),
       );
     });
@@ -70,6 +76,41 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) => emit(
           Authenticated(user: user),
         ),
+      );
+    });
+
+    on<SendEmailOTPEvent>((event, emit) async {
+      emit(AuthLoading(message: "Sending OTP to ${event.user.email}."));
+      final result = await sendEmailOTP(EmailOTPParams(user: event.user));
+
+      result.fold(
+        (failure) {
+          event.user.delete();
+          emit(AuthError(error: failure.message));
+          emit(UnAuthenticated());
+        },
+        (user) {
+          emit(EmailOTPSent(user: user));
+        },
+      );
+    });
+
+    on<ValidateEmailOTPEvent>((event, emit) async {
+      emit(const AuthLoading(message: "Verifying OTP."));
+      final result = await validateEmailOTP(
+          EmailOTPParams(user: event.user, otp: event.otp));
+
+      result.fold(
+        (failure) {
+          event.user.delete();
+          emit(AuthError(error: failure.message));
+          emit(UnAuthenticated());
+        },
+        (user) {
+          emit(
+            Authenticated(user: user),
+          );
+        },
       );
     });
 
