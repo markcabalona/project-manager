@@ -9,6 +9,7 @@ A simple Project Manager application made with flutter
   - Dark theme
   - Native Splash Screen
   - CRUD operations on project page
+  - Email Verification
 
 ### Screenshots
   - [See some of screenshots](https://drive.google.com/drive/folders/13Xs3t16x0Sit9mfa51ct9EwI1GbTcPH8?usp=sharing)
