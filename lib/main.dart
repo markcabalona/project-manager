@@ -19,6 +19,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await customTheme.initTheme();
   di.init();
   runApp(
     MultiBlocProvider(
@@ -45,10 +46,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    customTheme.addListener(() async {
+    customTheme.addListener(() {
       setState(() {});
     });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    customTheme.dispose();
+    super.dispose();
   }
 
   @override

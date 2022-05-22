@@ -33,6 +33,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   cloud_firestore: ^3.1.14
   flutter_native_splash: ^2.1.6
+  shared_preferences: ^2.0.15
 
 flutter_native_splash:
   color: "#4F56A9"

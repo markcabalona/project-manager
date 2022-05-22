@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'lib_color_schemes.g.dart';
 
 CustomTheme customTheme = CustomTheme();
 
 class CustomTheme extends ChangeNotifier {
+  Future<void> initTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    _isDarkTheme = prefs.getBool('isDark') ?? false;
+    notifyListeners();
+  }
+
+  void _saveTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDark', _isDarkTheme);
+  }
+
   static bool _isDarkTheme = false;
 
   ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
   void toggleTheme() {
     _isDarkTheme = !_isDarkTheme;
+    _saveTheme();
     notifyListeners();
   }
 
