@@ -3,11 +3,12 @@
 A simple Project Manager application made with flutter
    - This project is still on progress
 
-### Features (as of May 15, 2022)
+### Features (as of May 22, 2022)
   - Google Authentication
   - Email and password login/signup
   - Dark theme
   - Native Splash Screen
+  - CRUD operations on project page
 
 ### Screenshots
   - [See some of screenshots](https://drive.google.com/drive/folders/13Xs3t16x0Sit9mfa51ct9EwI1GbTcPH8?usp=sharing)
