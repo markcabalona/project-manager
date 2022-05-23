@@ -5,10 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "todo",
+            "name": "todo chrome",
             "request": "launch",
             "type": "dart",
-            // "args": ["-d", "chrome","--web-port", "8000"],
+            "args": ["-d", "chrome","--web-port", "8000"],
+        },
+        {
+            "name": "todo phone",
+            "request": "launch",
+            "type": "dart",
         },
         {
             "name": "todo (profile mode)",

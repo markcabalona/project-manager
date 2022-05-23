@@ -30,12 +30,18 @@ class GoogleSignInEvent extends AuthEvent {}
 
 class SendEmailOTPEvent extends AuthEvent {
   final User user;
+  final bool? resend;
   const SendEmailOTPEvent({
     required this.user,
+    this.resend,
   });
 
   @override
-  List<Object> get props => super.props..add(user);
+  List<Object> get props => super.props
+    ..addAll([
+      user,
+      if (resend != null) ...[resend!]
+    ]);
 }
 
 class ValidateEmailOTPEvent extends AuthEvent {
