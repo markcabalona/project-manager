@@ -14,12 +14,19 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/project/data/datasources/firebase_datasource.dart';
 import 'features/project/data/datasources/remote_datasource.dart';
 import 'features/project/data/repositories/project_repo_impl.dart';
+import 'features/project/data/repositories/subtask_repo_impl.dart';
 import 'features/project/domain/repositories/project_repository.dart';
+import 'features/project/domain/repositories/subtask_repository.dart';
 import 'features/project/domain/usecases/create_project.dart';
+import 'features/project/domain/usecases/create_subtask.dart';
 import 'features/project/domain/usecases/delete_project.dart';
+import 'features/project/domain/usecases/delete_subtask.dart';
 import 'features/project/domain/usecases/fetch_projects.dart';
+import 'features/project/domain/usecases/fetch_subtasks.dart';
 import 'features/project/domain/usecases/update_project.dart';
+import 'features/project/domain/usecases/update_subtask.dart';
 import 'features/project/presentation/bloc/project_bloc.dart';
+import 'features/project/presentation/bloc/subtask_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -81,6 +88,7 @@ void init() {
     () => FirebaseAuthenticator(),
   );
 
+  // Project BLoc
   sl.registerFactory<ProjectBloc>(
     () => ProjectBloc(
       createProject: sl<CreateProject>(),
@@ -104,9 +112,41 @@ void init() {
     () => DeleteProject(repository: sl<ProjectRepository>()),
   );
 
-  // Repository
+  // Project Repository
   sl.registerLazySingleton<ProjectRepository>(
     () => ProjectRepositoryImpl(remoteDatasource: sl<RemoteDatasource>()),
+  );
+
+  //SubtaskBLoc
+  sl.registerFactory<SubtaskBloc>(
+    () => SubtaskBloc(
+      createSubtask: sl<CreateSubtask>(),
+      fetchSubtasks: sl<FetchSubtasks>(),
+      updateSubtask: sl<UpdateSubtask>(),
+      deleteSubtask: sl<DeleteSubtask>(),
+    ),
+  );
+
+  //Usecases
+  sl.registerLazySingleton<CreateSubtask>(
+    () => CreateSubtask(repository: sl<SubtaskRepository>()),
+  );
+
+  sl.registerLazySingleton<FetchSubtasks>(
+    () => FetchSubtasks(repository: sl<SubtaskRepository>()),
+  );
+
+  sl.registerLazySingleton<UpdateSubtask>(
+    () => UpdateSubtask(repository: sl<SubtaskRepository>()),
+  );
+
+  sl.registerLazySingleton<DeleteSubtask>(
+    () => DeleteSubtask(repository: sl<SubtaskRepository>()),
+  );
+
+  // Subtask Repository
+  sl.registerLazySingleton<SubtaskRepository>(
+    () => SubtaskRepositoryImpl(remoteDatasource: sl<RemoteDatasource>()),
   );
 
   //Datasource

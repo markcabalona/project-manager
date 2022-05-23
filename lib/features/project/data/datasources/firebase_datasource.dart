@@ -5,8 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/errors/exceptions.dart';
 import '../../domain/entities/project.dart';
+import '../../domain/entities/subtask.dart';
 import '../../domain/usecases/create_project.dart';
+import '../../domain/usecases/create_subtask.dart';
 import '../models/project_model.dart';
+import '../models/subtask_model.dart';
 import 'remote_datasource.dart';
 
 class FirebaseDatasource implements RemoteDatasource {
@@ -17,9 +20,11 @@ class FirebaseDatasource implements RemoteDatasource {
   Future<Project> createProject(CreateProjectParams newProj) async {
     final result = await _instance.collection('/projects').add(
           ProjectModel(
-            description: newProj.description.isEmpty?'No Description':newProj.description,
+            description: newProj.description.isEmpty
+                ? 'No Description'
+                : newProj.description,
             isPriority: newProj.isPriority,
-            projectTitle: newProj.title.isEmpty?'Untitled':newProj.title,
+            projectTitle: newProj.title.isEmpty ? 'Untitled' : newProj.title,
           ).toMap()
             ..addEntries(
                 {'user_id': _firebaseAuthInstance.currentUser!.uid}.entries),
@@ -97,12 +102,113 @@ class FirebaseDatasource implements RemoteDatasource {
 
       return _instance.collection('/projects').doc(proj.id).get().then((value) {
         if (value.data() == null) {
-          throw const ServerException(message: "Failed to create Project");
+          throw const ServerException(message: "Failed to update Project");
         }
         return ProjectModel.fromMap(
           value.data()!
             ..addEntries(
               {'proj_id': proj.id}.entries,
+            ),
+        );
+      });
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<Subtask> createSubtask(CreateSubtaskParams newSubtask) async {
+    final result = await _instance.collection('/subtasks/').add(
+          SubtaskModel(
+            projectId: newSubtask.projectId,
+            description: newSubtask.description.isEmpty
+                ? 'No Description'
+                : newSubtask.description,
+            isPriority: newSubtask.isPriority,
+            subtaskTitle:
+                newSubtask.title.isEmpty ? 'Untitled' : newSubtask.title,
+          ).toMap(),
+        );
+
+    return result.get().then((value) {
+      if (value.data() == null) {
+        throw const ServerException(message: "Failed to create Subtask");
+      }
+      return SubtaskModel.fromMap(
+        value.data()!
+          ..addEntries(
+            {'subtask_id': value.id}.entries,
+          ),
+      );
+    });
+  }
+
+  @override
+  Future<void> deleteSubtask(String subtaskId) async {
+    try {
+      return await _instance.collection('/subtasks').doc(subtaskId).delete();
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<List<Subtask>> fetchSubtasks(String projectId) async {
+    try {
+      final result = await _instance
+          .collection('/subtasks')
+          .where(
+            'project_id',
+            isEqualTo: projectId,
+          )
+          .orderBy(
+            'is_priority',
+            descending: false,
+          )
+          .get();
+
+      return result.docs
+          .map(
+            (doc) => SubtaskModel.fromMap(
+              doc.data()
+                ..addEntries(
+                  {'subtask_id': doc.id}.entries,
+                ),
+            ),
+          )
+          .toList();
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<Subtask> updateSubtask(Subtask subtask) async {
+    try {
+      await _instance.collection('/subtasks').doc(subtask.id).update(
+            ProjectModel(
+                    projectTitle: subtask.title,
+                    description: subtask.description,
+                    isPriority: subtask.isPriority,
+                    dateCreated: subtask.dateCreated,
+                    isFinished: subtask.isFinished,
+                    lastUpdated: subtask.lastUpdated,
+                    projectId: subtask.id)
+                .toMap(),
+          );
+
+      return _instance
+          .collection('/subtasks')
+          .doc(subtask.id)
+          .get()
+          .then((value) {
+        if (value.data() == null) {
+          throw const ServerException(message: "Failed to update subtask");
+        }
+        return SubtaskModel.fromMap(
+          value.data()!
+            ..addEntries(
+              {'subtask_id': subtask.id}.entries,
             ),
         );
       });
