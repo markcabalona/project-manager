@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:todo/features/project/domain/entities/subtask.dart';
 
 import '../../domain/usecases/create_subtask.dart';
 import '../../domain/usecases/delete_subtask.dart';
@@ -20,9 +21,16 @@ class SubtaskBloc extends Bloc<SubtaskEvent, SubtaskState> {
     required this.fetchSubtasks,
     required this.updateSubtask,
     required this.deleteSubtask,
-  }) : super(SubtaskInitial()) {
-    on<SubtaskEvent>((event, emit) {
-      // TODO: implement event handler
+  }) : super(FetchingSubtasks()) {
+    on<FetchSubtasksEvent>((event, emit) async {
+      emit(FetchingSubtasks());
+
+      final result = await fetchSubtasks(event.projectId);
+
+      result.fold(
+        (failure) => emit(SubtaskError(errorMessage: failure.message)),
+        (subtasks) => emit(SubtasksLoaded(subtasks: subtasks)),
+      );
     });
   }
 }

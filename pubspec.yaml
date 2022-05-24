@@ -35,6 +35,7 @@ dependencies:
   flutter_native_splash: ^2.1.6
   shared_preferences: ^2.0.15
   email_auth: ^1.0.0
+  intl: ^0.17.0
 
 flutter_native_splash:
   color: "#4F56A9"

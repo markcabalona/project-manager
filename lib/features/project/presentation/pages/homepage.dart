@@ -8,7 +8,8 @@ import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../bloc/project_bloc.dart';
 import '../widgets/custom_appbar_leading.dart';
 import '../widgets/homepage_body.dart';
-import '../widgets/project_dialog_form.dart';
+import '../widgets/project/project_dialog_form.dart';
+
 
 class HomePage extends StatelessWidget {
   final User user;

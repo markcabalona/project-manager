@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/project.dart';
-import '../../domain/usecases/delete_project.dart';
-import '../bloc/project_bloc.dart';
+import '../../../domain/entities/project.dart';
+import '../../../domain/usecases/delete_project.dart';
+import '../../bloc/project_bloc.dart';
+import '../../bloc/subtask_bloc.dart';
+import '../../pages/project_page.dart';
 import 'project_dialog_form.dart';
 
 class ProjectTile extends StatelessWidget {
@@ -21,7 +23,12 @@ class ProjectTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       onTap: () {
-        // TODO: Navigate to specific project page
+        BlocProvider.of<SubtaskBloc>(context).add(FetchSubtasksEvent(projectId: project.id));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ProjectPage(project: project),
+          ),
+        );
       },
       leading: project.isFinished ? const Icon(Icons.done_rounded) : null,
       title: Text(

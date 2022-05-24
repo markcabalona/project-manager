@@ -11,6 +11,7 @@ import 'features/auth/presentation/pages/authenticate_page.dart';
 import 'features/auth/presentation/pages/sign_in_page.dart';
 import 'features/auth/presentation/pages/sign_up_page.dart';
 import 'features/project/presentation/bloc/project_bloc.dart';
+import 'features/project/presentation/bloc/subtask_bloc.dart';
 import 'features/project/presentation/pages/homepage.dart';
 import 'firebase_options.dart';
 
@@ -29,6 +30,9 @@ Future<void> main() async {
         ),
         BlocProvider<ProjectBloc>(
           create: (context) => di.sl<ProjectBloc>(),
+        ),
+        BlocProvider<SubtaskBloc>(
+          create: (context) => di.sl<SubtaskBloc>(),
         ),
       ],
       child: const MyApp(),

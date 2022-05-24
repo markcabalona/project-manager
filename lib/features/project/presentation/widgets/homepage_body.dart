@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../domain/entities/project.dart';
 import '../bloc/project_bloc.dart';
-import 'project_tile.dart';
+import 'project/project_tile.dart';
+
 
 class HomePageBody extends StatelessWidget {
   final List<Project> projects;

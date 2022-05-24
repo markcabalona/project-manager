@@ -22,7 +22,7 @@ class CustomErrorWidget extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Text(
+          SelectableText(
             errorMessage,
             // style: const TextStyle(color: kAccentColor),
           ),

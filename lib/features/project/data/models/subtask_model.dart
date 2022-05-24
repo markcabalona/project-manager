@@ -30,7 +30,7 @@ class SubtaskModel extends Subtask {
         'is_finished': isFinished,
         'is_priority': isPriority,
         'date_created': dateCreated,
-        'last_updated': lastUpdated,
+        'last_updated': DateTime.now(),
       };
 
   factory SubtaskModel.fromMap(Map<String, dynamic> map) {

@@ -27,7 +27,7 @@ class ProjectModel extends Project {
         'is_finished': isFinished,
         'is_priority': isPriority,
         'date_created': dateCreated,
-        'last_updated': lastUpdated,
+        'last_updated': DateTime.now(),
       };
 
   factory ProjectModel.fromMap(Map<String, dynamic> map) {
