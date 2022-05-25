@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/presentation/routes/routes.dart';
 import '../widgets/auth_screen_navigator.dart';
 import '../widgets/other_options_divider.dart';
 import '../widgets/sign_in_form.dart';
@@ -40,7 +42,7 @@ class SignInPage extends StatelessWidget {
                   hint: "Don't have an account yet?",
                   buttonLabel: "Sign Up",
                   callback: () {
-                    Navigator.of(context).popAndPushNamed('/signUp');
+                    context.goNamed(Routes.signUp.name);
                   },
                 ),
               ],

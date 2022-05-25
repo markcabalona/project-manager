@@ -80,6 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<SendEmailOTPEvent>((event, emit) async {
+      final latestState = state;
       emit(AuthLoading(message: "Sending OTP to ${event.user.email}."));
       final result = await sendEmailOTP(EmailOTPParams(user: event.user));
 
@@ -90,7 +91,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(UnAuthenticated());
         },
         (user) {
-          emit(EmailOTPSent(user: user));
+          if (latestState is! EmailOTPSent) {
+            emit(EmailOTPSent(user: user));
+          }
         },
       );
     });

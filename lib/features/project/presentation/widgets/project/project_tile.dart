@@ -23,7 +23,8 @@ class ProjectTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       onTap: () {
-        BlocProvider.of<SubtaskBloc>(context).add(FetchSubtasksEvent(projectId: project.id));
+        BlocProvider.of<SubtaskBloc>(context)
+            .add(FetchSubtasksEvent(projectId: project.id));
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ProjectPage(project: project),
@@ -46,52 +47,54 @@ class ProjectTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
       ),
-      trailing: SizedBox(
-        width: 96,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (!project.isFinished)
-              IconButton(
-                key: editBtnKey,
-                onPressed: () {
-                  final offset = (editBtnKey.currentContext?.findRenderObject()
-                          as RenderBox)
-                      .localToGlobal(Offset.zero);
-                  showGeneralDialog(
-                    context: context,
-                    pageBuilder: (context, anim1, anim2) {
-                      return ProjectDialogForm(project: project);
-                    },
-                    transitionBuilder: (context, anim1, anim2, child) {
-                      return Transform.scale(
-                        scaleY: anim1.value,
-                        origin: Offset(
-                          0,
-                          -((MediaQuery.of(context).size.height / 2) -
-                              offset.dy),
+      trailing: project.isFinished
+          ? null
+          : SizedBox(
+              width: 96,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (!project.isFinished)
+                    IconButton(
+                      key: editBtnKey,
+                      onPressed: () {
+                        final offset = (editBtnKey.currentContext
+                                ?.findRenderObject() as RenderBox)
+                            .localToGlobal(Offset.zero);
+                        showGeneralDialog(
+                          context: context,
+                          pageBuilder: (context, anim1, anim2) {
+                            return ProjectDialogForm(project: project);
+                          },
+                          transitionBuilder: (context, anim1, anim2, child) {
+                            return Transform.scale(
+                              scaleY: anim1.value,
+                              origin: Offset(
+                                0,
+                                -((MediaQuery.of(context).size.height / 2) -
+                                    offset.dy),
+                              ),
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 300),
+                        );
+                      },
+                      icon: const Icon(Icons.edit_outlined),
+                    ),
+                  IconButton(
+                    onPressed: () {
+                      BlocProvider.of<ProjectBloc>(context).add(
+                        DeleteProjectEvent(
+                          params: DeleteProjectParams(projectId: project.id),
                         ),
-                        child: child,
                       );
                     },
-                    transitionDuration: const Duration(milliseconds: 300),
-                  );
-                },
-                icon: const Icon(Icons.edit_outlined),
-              ),
-            IconButton(
-              onPressed: () {
-                BlocProvider.of<ProjectBloc>(context).add(
-                  DeleteProjectEvent(
-                    params: DeleteProjectParams(projectId: project.id),
+                    icon: const Icon(Icons.delete_outline),
                   ),
-                );
-              },
-              icon: const Icon(Icons.delete_outline),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

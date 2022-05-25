@@ -75,7 +75,7 @@ class SubtaskBody extends StatelessWidget {
             );
           } else {
             return Column(
-              children: [],
+              children: const [],
             );
           }
         } else if (state is SubtaskError) {

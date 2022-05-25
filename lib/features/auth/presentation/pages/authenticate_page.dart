@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:todo/core/presentation/routes/routes.dart';
 
 import '../../../../core/presentation/widgets/theme_mode_iconbutton.dart';
-import '../../../project/presentation/pages/homepage.dart';
 import '../bloc/auth_bloc.dart';
 import 'otp_validation_page.dart';
 import 'sign_in_page.dart';
@@ -32,8 +35,11 @@ class AuthenticatePage extends StatelessWidget {
         body = const SignUpPage();
       },
     );
-    return BlocConsumer<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, authState) {
+        if (authState is EmailOTPSent) {
+          context.goNamed(Routes.otp.name, extra: authState.user);
+        }
         if (authState is AuthLoading) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -82,38 +88,26 @@ class AuthenticatePage extends StatelessWidget {
                 content: Text(successMessage),
               ),
             );
+        } else if (authState is UnAuthenticated) {
+          context.goNamed(
+              (body is SignInPage) ? Routes.login.name : Routes.signUp.name);
         } else {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         }
       },
-      builder: (context, authState) {
-        if (authState is Authenticated) {
-          // set body to SignInPage so that user will redirect to SignInPage on logout event
-          body = const SignInPage();
-          successMessage = "Logged In";
-          return HomePage(user: authState.user);
-        }
-        if (authState is EmailOTPSent) {
-          return OTPValidationPage(
-            user: authState.user,
-          );
-        }
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            actions: [
-              ThemeModeIconButton(
-                primaryColor: body is SignUpPage
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
-              ),
-            ],
-          ),
-          body: body,
-        );
-      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          foregroundColor:
+              body is SignUpPage ? Theme.of(context).colorScheme.primary : null,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: const [
+            ThemeModeIconButton(),
+          ],
+        ),
+        body: body,
+      ),
     );
   }
 }

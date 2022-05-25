@@ -10,12 +10,10 @@ import '../widgets/custom_appbar_leading.dart';
 import '../widgets/homepage_body.dart';
 import '../widgets/project/project_dialog_form.dart';
 
-
 class HomePage extends StatelessWidget {
-  final User user;
-  const HomePage({
+  final User user = FirebaseAuth.instance.currentUser!;
+  HomePage({
     Key? key,
-    required this.user,
   }) : super(key: key);
 
   @override
