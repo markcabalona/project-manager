@@ -20,7 +20,7 @@ Future<void> main() async {
   await customTheme.initTheme();
 
   di.init();
-  debugRepaintRainbowEnabled = true;
+  // debugRepaintRainbowEnabled = true;
   runApp(
     MultiBlocProvider(
       providers: [

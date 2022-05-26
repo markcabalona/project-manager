@@ -16,43 +16,46 @@ class SignUpPage extends StatelessWidget {
       alignment: Alignment.center,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Create an Account",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
+          padding: const EdgeInsets.all(20),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Create an Account",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              const SignUpForm(),
-              const SizedBox(
-                height: 20,
-              ),
-              const OtherOptionsDivider(
-                title: "Or Continue With",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const ThirdPartyAuth(),
-              const SizedBox(
-                height: 20,
-              ),
-              AuthScreenNavigator(
-                hint: "Already have an account?",
-                buttonLabel: "Sign In",
-                callback: () {
-                  context.goNamed(Routes.login.name);
-                },
-              ),
-            ],
+                const SizedBox(
+                  height: 60,
+                ),
+                const SignUpForm(),
+                const SizedBox(
+                  height: 20,
+                ),
+                const OtherOptionsDivider(
+                  title: "Or Continue With",
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const ThirdPartyAuth(),
+                const SizedBox(
+                  height: 20,
+                ),
+                AuthScreenNavigator(
+                  hint: "Already have an account?",
+                  buttonLabel: "Sign In",
+                  callback: () {
+                    context.goNamed(Routes.login.name);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

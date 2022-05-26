@@ -20,36 +20,41 @@ class SignInPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SignInForm(),
-                const SizedBox(
-                  height: 20,
-                ),
-                const OtherOptionsDivider(
-                  title: "Or Continue With",
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const RepaintBoundary(
-                  child: ThirdPartyAuth(),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                RepaintBoundary(
-                  child: AuthScreenNavigator(
-                    hint: "Don't have an account yet?",
-                    buttonLabel: "Sign Up",
-                    callback: () {
-                      context.goNamed(Routes.signUp.name);
-                    },
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 500,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const SignInForm(),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
+                  const OtherOptionsDivider(
+                    title: "Or Continue With",
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const RepaintBoundary(
+                    child: ThirdPartyAuth(),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  RepaintBoundary(
+                    child: AuthScreenNavigator(
+                      hint: "Don't have an account yet?",
+                      buttonLabel: "Sign Up",
+                      callback: () {
+                        context.goNamed(Routes.signUp.name);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
