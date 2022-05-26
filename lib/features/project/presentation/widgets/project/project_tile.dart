@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/presentation/routes/routes.dart';
 import '../../../domain/entities/project.dart';
 import '../../../domain/usecases/delete_project.dart';
 import '../../bloc/project_bloc.dart';
-import '../../bloc/subtask_bloc.dart';
-import '../../pages/project_page.dart';
-import 'project_dialog_form.dart';
+import '../task_dialog_form.dart';
 
 class ProjectTile extends StatelessWidget {
   final Project project;
@@ -25,12 +25,10 @@ class ProjectTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         onTap: () {
-          BlocProvider.of<SubtaskBloc>(context)
-              .add(FetchSubtasksEvent(projectId: project.id));
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ProjectPage(project: project),
-            ),
+          context.pushNamed(
+            Routes.project.name,
+            params: {'project_id': project.id},
+            extra: project,
           );
         },
         leading: project.isFinished ? const Icon(Icons.done_rounded) : null,
@@ -66,7 +64,23 @@ class ProjectTile extends StatelessWidget {
                           showGeneralDialog(
                             context: context,
                             pageBuilder: (context, anim1, anim2) {
-                              return ProjectDialogForm(project: project);
+                              return RepaintBoundary(
+                                child: TaskDialogForm(
+                                  headerTitle: 'Update Project',
+                                  buttonText: 'Update',
+                                  loadingMessage: 'Updating Project',
+                                  onSubmit: (String title, String description) {
+                                    BlocProvider.of<ProjectBloc>(context).add(
+                                      UpdateProjectEvent(
+                                        project: project.copyWith(
+                                          title: title,
+                                          description: description,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             transitionBuilder: (context, anim1, anim2, child) {
                               return Transform.scale(
@@ -79,7 +93,8 @@ class ProjectTile extends StatelessWidget {
                                 child: child,
                               );
                             },
-                            transitionDuration: const Duration(milliseconds: 300),
+                            transitionDuration:
+                                const Duration(milliseconds: 300),
                           );
                         },
                         icon: const Icon(Icons.edit_outlined),

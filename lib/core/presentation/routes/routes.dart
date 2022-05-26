@@ -3,42 +3,29 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todo/features/auth/presentation/pages/otp_validation_page.dart';
 
 import '../../../features/auth/presentation/pages/authenticate_page.dart';
+import '../../../features/auth/presentation/pages/otp_validation_page.dart';
 import '../../../features/auth/presentation/pages/sign_in_page.dart';
 import '../../../features/auth/presentation/pages/sign_up_page.dart';
+import '../../../features/project/domain/entities/project.dart';
+import '../../../features/project/presentation/bloc/subtask_bloc.dart';
 import '../../../features/project/presentation/pages/homepage.dart';
+import '../../../features/project/presentation/pages/project_page.dart';
+import '../../login_info.dart';
 import '../widgets/error_widget.dart';
-
-class LoginInfo extends ChangeNotifier {
-  bool _isLoggedIn = FirebaseAuth.instance.currentUser != null;
-
-  get isLoggedIn => _isLoggedIn;
-
-  void login() {
-    _isLoggedIn = true;
-    notifyListeners();
-  }
-
-  void logout() {
-    _isLoggedIn = false;
-    notifyListeners();
-  }
-}
-
-final LoginInfo loginInfo = LoginInfo();
 
 final router = GoRouter(
   redirect: (state) {
+    final LoginInfo loginInfo = LoginInfo.instance;
     final loggingIn = [
       Routes.login.path,
       Routes.signUp.path,
       Routes.signUp.path + Routes.otp.path
     ].contains(state.subloc);
 
-    log(loggingIn.toString() + state.subloc);
     if (loggingIn && loginInfo.isLoggedIn) {
       return Routes.home.path;
     } else if (!loginInfo.isLoggedIn && !loggingIn) {
@@ -46,17 +33,21 @@ final router = GoRouter(
     }
     return null;
   },
-  refreshListenable: loginInfo,
-  //GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
+  refreshListenable: LoginInfo.instance,
   initialLocation: Routes.home.path,
   routes: [
     GoRoute(
       name: Routes.home.name,
       path: Routes.home.path,
       pageBuilder: (context, state) {
-        return MaterialPage(
-          child: HomePage(),
-        );
+        try {
+          return const MaterialPage(
+            child: HomePage(),
+          );
+        } catch (e) {
+          return MaterialPage(
+              child: CustomErrorWidget(errorMessage: e.toString()));
+        }
       },
     ),
     GoRoute(
@@ -98,8 +89,22 @@ final router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      name: Routes.project.name,
+      path: Routes.project.pathWithParams('project_id'),
+      pageBuilder: (context, state) {
+        BlocProvider.of<SubtaskBloc>(context).add(
+          FetchSubtasksEvent(projectId: state.params['project_id']!),
+        );
+        return MaterialPage(
+          child: ProjectPage(project: state.extra as Project),
+        );
+      },
+    ),
   ],
   errorPageBuilder: (context, state) {
+    log(state.path ?? state.location);
+    log(state.error.toString());
     return MaterialPage(
       key: state.pageKey,
       child: const CustomErrorWidget(
@@ -114,15 +119,18 @@ class Routes {
   static const Route login = Route(path: '/login', name: 'login');
   static const Route signUp = Route(path: '/sign-up', name: 'sign-up');
   static const Route otp = Route(path: '/verification', name: 'otp');
+  static const Route project = Route(path: '/project', name: 'project');
 }
 
 class Route {
   final String path;
   final String name;
+
   const Route({
     required this.path,
     required this.name,
   });
 
   String get pathAsSubRoute => path.replaceAll('/', '');
+  String pathWithParams(String params) => '$path/:$params';
 }

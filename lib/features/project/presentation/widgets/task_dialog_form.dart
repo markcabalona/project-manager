@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entities/project.dart';
-import '../../../domain/usecases/create_project.dart';
-import '../../bloc/project_bloc.dart';
+class TaskDialogForm extends StatelessWidget {
+  final String headerTitle;
+  final String buttonText;
+  final String? initialTitle;
+  final String? initialDesc;
+  final void Function(String title, String description) onSubmit;
+  final String loadingMessage;
 
-
-
-class ProjectDialogForm extends StatelessWidget {
-  final Project? project;
-
-  const ProjectDialogForm({
+  const TaskDialogForm({
     Key? key,
-    this.project,
+    required this.headerTitle,
+    required this.buttonText,
+    this.initialTitle,
+    this.initialDesc,
+    required this.onSubmit,
+    required this.loadingMessage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final titleCtrl = TextEditingController(text: project?.title);
-    final descCtrl = TextEditingController(text: project?.description);
+    final titleCtrl = TextEditingController(text: initialTitle);
+    final descCtrl = TextEditingController(text: initialDesc);
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(
@@ -49,7 +52,7 @@ class ProjectDialogForm extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    project == null ? "New Project" : 'Update Project',
+                    headerTitle,
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(
@@ -93,27 +96,16 @@ class ProjectDialogForm extends StatelessWidget {
                         child: TextButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              BlocProvider.of<ProjectBloc>(context).add(
-                                project == null
-                                    ? CreateProjectEvent(
-                                        newProj: CreateProjectParams(
-                                          title: titleCtrl.text,
-                                          description: descCtrl.text,
-                                          isPriority: false,
-                                        ),
-                                      )
-                                    : UpdateProjectEvent(
-                                        project: project!.copyWith(
-                                          title: titleCtrl.text,
-                                          description: descCtrl.text,
-                                        ),
-                                      ),
+                              onSubmit(
+                                titleCtrl.text,
+                                descCtrl.text,
                               );
+
                               ScaffoldMessenger.of(context)
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(
                                   SnackBar(
-                                    content: Text(project==null?"Creating project":"Updating project"),
+                                    content: Text(loadingMessage),
                                   ),
                                 );
                               Navigator.pop(context);
@@ -127,7 +119,7 @@ class ProjectDialogForm extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            project == null ? "Add" : 'Update',
+                            buttonText,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSecondary,
                             ),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 
-import '../../../../core/presentation/widgets/error_widget.dart';
 import '../../domain/entities/project.dart';
+import '../../domain/usecases/create_subtask.dart';
 import '../bloc/subtask_bloc.dart';
+import '../widgets/project/project_header.dart';
+import '../widgets/subtask/subtask_body.dart';
+import '../widgets/task_dialog_form.dart';
 
 class ProjectPage extends StatelessWidget {
   final Project project;
@@ -16,111 +17,61 @@ class ProjectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SubtaskBloc, SubtaskState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProjectHeader(project: project),
-              ),
-              const SubtaskBody(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(),
+      floatingActionButton: RepaintBoundary(
+        child: FloatingActionButton(
+          onPressed: () {
+            showGeneralDialog(
+              context: context,
+              pageBuilder: (context, anim1, anim2) {
+                return RepaintBoundary(
+                  child: TaskDialogForm(
+                    headerTitle: 'New Subtask',
+                    buttonText: 'Create',
+                    loadingMessage: 'Creating Subtask',
+                    onSubmit: (String title, String description) {
+                      BlocProvider.of<SubtaskBloc>(context).add(
+                        CreateSubtaskEvent(
+                          newSubtask: CreateSubtaskParams(
+                            projectId: project.id,
+                            title: title,
+                            description: description,
+                            isPriority: false,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              transitionBuilder: (context, anim1, anim2, child) {
+                return Transform.scale(
+                  scale: anim1.value,
+                  origin: Offset(
+                    MediaQuery.of(context).size.width / 2,
+                    MediaQuery.of(context).size.height / 2,
+                  ),
+                  child: child,
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 300),
+            );
+          },
+          child: const Icon(Icons.add),
         ),
       ),
-    );
-  }
-}
-
-class SubtaskBody extends StatelessWidget {
-  const SubtaskBody({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SubtaskBloc, SubtaskState>(
-      builder: (context, state) {
-        if (state is SubtasksLoaded) {
-          if (state.subtasks.isEmpty) {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.listOl,
-                    size: 64,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "No subtasks yet.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Column(
-              children: const [],
-            );
-          }
-        } else if (state is SubtaskError) {
-          return CustomErrorWidget(errorMessage: state.errorMessage);
-        } else {
-          return const Center(
-            child: RepaintBoundary(
-              child: CircularProgressIndicator(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ProjectHeader(project: project),
             ),
-          );
-        }
-      },
-    );
-  }
-}
-
-class ProjectHeader extends StatelessWidget {
-  const ProjectHeader({
-    Key? key,
-    required this.project,
-  }) : super(key: key);
-
-  final Project project;
-
-  @override
-  Widget build(BuildContext context) {
-    final formatter = DateFormat.yMMMMd();
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Last updated at: ${formatter.format(project.lastUpdated)}',
-            style: Theme.of(context).textTheme.caption,
-          ),
+            const SubtaskBody(),
+          ],
         ),
-        Text(
-          project.title,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        Text(
-          project.description,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ],
+      ),
     );
   }
 }

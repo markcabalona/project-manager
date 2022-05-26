@@ -16,3 +16,13 @@ class FetchSubtasksEvent extends SubtaskEvent {
   @override
   List<Object> get props => super.props..add(projectId);
 }
+
+class CreateSubtaskEvent extends SubtaskEvent {
+  final CreateSubtaskParams newSubtask;
+  const CreateSubtaskEvent({
+    required this.newSubtask,
+  });
+
+  @override
+  List<Object> get props => super.props..add(newSubtask);
+}

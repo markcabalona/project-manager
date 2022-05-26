@@ -1,9 +1,10 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo/core/login_info.dart';
 
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/presentation/routes/routes.dart';
 import '../../domain/entities/project.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/usecases/create_project.dart';
@@ -13,7 +14,7 @@ import '../models/subtask_model.dart';
 import 'remote_datasource.dart';
 
 class FirebaseDatasource implements RemoteDatasource {
-  final FirebaseAuth _firebaseAuthInstance = FirebaseAuth.instance;
+  final LoginInfo loginInfo = LoginInfo.instance;
   final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
   @override
@@ -26,8 +27,7 @@ class FirebaseDatasource implements RemoteDatasource {
             isPriority: newProj.isPriority,
             projectTitle: newProj.title.isEmpty ? 'Untitled' : newProj.title,
           ).toMap()
-            ..addEntries(
-                {'user_id': _firebaseAuthInstance.currentUser!.uid}.entries),
+            ..addEntries({'user_id': loginInfo.currentUID}.entries),
         );
 
     return result.get().then((value) {
@@ -55,12 +55,12 @@ class FirebaseDatasource implements RemoteDatasource {
   @override
   Future<List<Project>> fetchProjects() async {
     try {
-      log(_firebaseAuthInstance.currentUser!.uid);
+      log(loginInfo.currentUID!);
       final result = await _instance
           .collection('/projects')
           .where(
             'user_id',
-            isEqualTo: _firebaseAuthInstance.currentUser!.uid,
+            isEqualTo: loginInfo.currentUID,
           )
           .orderBy(
             'is_priority',
@@ -96,7 +96,7 @@ class FirebaseDatasource implements RemoteDatasource {
               lastUpdated: proj.lastUpdated,
             ).toMap()
               ..addEntries(
-                {'user_id': _firebaseAuthInstance.currentUser!.uid}.entries,
+                {'user_id': loginInfo.currentUID}.entries,
               ),
           );
 

@@ -19,6 +19,18 @@ class SubtasksLoaded extends SubtaskState {
   List<Object> get props => super.props..add(subtasks);
 }
 
+class CreatingSubtask extends SubtaskState{}
+
+class SubtaskCreated extends SubtaskState {
+  final Subtask subtask;
+  const SubtaskCreated({
+    required this.subtask,
+  });
+
+  @override
+  List<Object> get props => super.props..add(subtask);
+}
+
 class SubtaskError extends SubtaskState {
   final String errorMessage;
   const SubtaskError({

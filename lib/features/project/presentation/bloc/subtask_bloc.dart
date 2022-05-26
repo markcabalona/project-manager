@@ -22,15 +22,33 @@ class SubtaskBloc extends Bloc<SubtaskEvent, SubtaskState> {
     required this.updateSubtask,
     required this.deleteSubtask,
   }) : super(FetchingSubtasks()) {
-    on<FetchSubtasksEvent>((event, emit) async {
-      emit(FetchingSubtasks());
+    on<FetchSubtasksEvent>(
+      (event, emit) async {
+        emit(FetchingSubtasks());
 
-      final result = await fetchSubtasks(event.projectId);
+        final result = await fetchSubtasks(event.projectId);
 
-      result.fold(
-        (failure) => emit(SubtaskError(errorMessage: failure.message)),
-        (subtasks) => emit(SubtasksLoaded(subtasks: subtasks)),
-      );
-    });
+        result.fold(
+          (failure) => emit(SubtaskError(errorMessage: failure.message)),
+          (subtasks) => emit(SubtasksLoaded(subtasks: subtasks)),
+        );
+      },
+    );
+
+    on<CreateSubtaskEvent>(
+      (event, emit) async {
+        emit(CreatingSubtask());
+        final result = await createSubtask(event.newSubtask);
+
+        result.fold(
+          (failure) => emit(
+            SubtaskError(errorMessage: failure.message),
+          ),
+          (subtask) => emit(
+            SubtaskCreated(subtask: subtask),
+          ),
+        );
+      },
+    );
   }
 }

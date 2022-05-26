@@ -3,12 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'lib_color_schemes.g.dart';
+import 'shared_prefs.dart';
 
 CustomTheme customTheme = CustomTheme();
 
 class CustomTheme extends ChangeNotifier {
   Future<void> initTheme() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = SharedPrefs.prefs;
     _isDarkTheme = prefs.getBool('isDark') ?? false;
     notifyListeners();
   }
