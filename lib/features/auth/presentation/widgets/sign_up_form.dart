@@ -51,83 +51,93 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextFormField(
-            controller: _usernameCtrl,
-            validator: (val) => _usernameValidator(val),
-            decoration: InputDecoration(
-              filled: true,
-              // fillColor: kSecondaryColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
+          RepaintBoundary(
+            child: TextFormField(
+              controller: _usernameCtrl,
+              validator: (val) => _usernameValidator(val),
+              decoration: InputDecoration(
+                filled: true,
+                // fillColor: kSecondaryColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                prefixIcon: const Icon(
+                  Icons.person,
+                  // color: kPrimaryColor.withOpacity(.5),
+                ),
+                hintText: "Enter Username",
+                // hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
+                label: const Text("Username"),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              prefixIcon: const Icon(
-                Icons.person,
-                // color: kPrimaryColor.withOpacity(.5),
-              ),
-              hintText: "Enter Username",
-              // hintStyle: TextStyle(color: kPrimaryColor.withOpacity(.5)),
-              label: const Text("Username"),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          TextFormField(
-            controller: _passwordCtrl,
-            validator: (val) => _passwordValidator(val),
-            obscureText: !passwordDisplayed,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.lock,
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                  icon: Icon(
-                    passwordDisplayed
-                        ? FontAwesomeIcons.eye
-                        : FontAwesomeIcons.eyeSlash,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      passwordDisplayed = !passwordDisplayed;
-                    });
-                  },
+          RepaintBoundary(
+            child: TextFormField(
+              controller: _passwordCtrl,
+              validator: (val) => _passwordValidator(val),
+              obscureText: !passwordDisplayed,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.lock,
                 ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RepaintBoundary(
+                    child: IconButton(
+                      icon: Icon(
+                        passwordDisplayed
+                            ? FontAwesomeIcons.eye
+                            : FontAwesomeIcons.eyeSlash,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          passwordDisplayed = !passwordDisplayed;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                hintText: "Enter Password",
+                label: const Text("Password"),
               ),
-              hintText: "Enter Password",
-              label: const Text("Password"),
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          TextFormField(
-            controller: _confirmPasswordCtrl,
-            validator: (val) => _passwordValidator(val),
-            obscureText: !passwordDisplayed,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.lock,
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                  icon: Icon(
-                    passwordDisplayed
-                        ? FontAwesomeIcons.eye
-                        : FontAwesomeIcons.eyeSlash,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      passwordDisplayed = !passwordDisplayed;
-                    });
-                  },
+          RepaintBoundary(
+            child: TextFormField(
+              controller: _confirmPasswordCtrl,
+              validator: (val) => _passwordValidator(val),
+              obscureText: !passwordDisplayed,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.lock,
                 ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RepaintBoundary(
+                    child: IconButton(
+                      icon: Icon(
+                        passwordDisplayed
+                            ? FontAwesomeIcons.eye
+                            : FontAwesomeIcons.eyeSlash,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          passwordDisplayed = !passwordDisplayed;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                hintText: "Re-enter Password",
+                label: const Text("Confirm Password"),
               ),
-              hintText: "Re-enter Password",
-              label: const Text("Confirm Password"),
             ),
           ),
           const SizedBox(
@@ -135,27 +145,29 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  BlocProvider.of<AuthBloc>(context).add(
-                    SignUpEvent(
-                      params: AuthParams(
-                        email: _usernameCtrl.text,
-                        password: _passwordCtrl.text,
+            child: RepaintBoundary(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    BlocProvider.of<AuthBloc>(context).add(
+                      SignUpEvent(
+                        params: AuthParams(
+                          email: _usernameCtrl.text,
+                          password: _passwordCtrl.text,
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-              ),
-              child: const Text(
-                "Create Account",
-                style: TextStyle(),
+                child: const Text(
+                  "Create Account",
+                  style: TextStyle(),
+                ),
               ),
             ),
           ),

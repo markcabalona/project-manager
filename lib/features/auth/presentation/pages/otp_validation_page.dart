@@ -60,42 +60,48 @@ class OTPValidationPage extends StatelessWidget {
                     height: 30,
                   ),
 
-                  TextFormField(
-                    controller: otpCtrl,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'OTP cannot be empty';
-                      } else if (val.length != 6) {
-                        return 'OTP must be 6-digit number';
-                      }
-                      return null;
-                    },
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge,
-                    decoration: InputDecoration(
-                      hintText: "Enter OTP",
-                      suffix: OTPResendButton(
-                        user: user,
-                        duration: 120 ,
+                  RepaintBoundary(
+                    child: TextFormField(
+                      controller: otpCtrl,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return 'OTP cannot be empty';
+                        } else if (val.length != 6) {
+                          return 'OTP must be 6-digit number';
+                        }
+                        return null;
+                      },
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      decoration: InputDecoration(
+                        hintText: "Enter OTP",
+                        suffix: RepaintBoundary(
+                          child: OTPResendButton(
+                            user: user,
+                            duration: 120 ,
+                          ),
+                        ),
                       ),
+                      keyboardType: TextInputType.number,
+                      autofocus: true,
+                      onEditingComplete: () {},
+                      onFieldSubmitted: (String? x) {
+                        onSubmit(context, formKey, otpCtrl);
+                      },
                     ),
-                    keyboardType: TextInputType.number,
-                    autofocus: true,
-                    onEditingComplete: () {},
-                    onFieldSubmitted: (String? x) {
-                      onSubmit(context, formKey, otpCtrl);
-                    },
                   ),
                   const SizedBox(
                     height: 30,
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        onSubmit(context, formKey, otpCtrl);
-                      },
-                      child: const Text('Verify and Create Account'),
+                    child: RepaintBoundary(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          onSubmit(context, formKey, otpCtrl);
+                        },
+                        child: const Text('Verify and Create Account'),
+                      ),
                     ),
                   ),
                   // const SizedBox(

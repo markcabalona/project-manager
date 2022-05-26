@@ -45,72 +45,78 @@ class _SignInFormState extends State<SignInForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextFormField(
-            controller: _usernameCtrl,
-            validator: (val) => _usernameValidator(val),
-            decoration: const InputDecoration(
-              prefixIcon: Icon(
-                Icons.person,
-              ),
-              hintText: "Enter Username",
-              label: Text("Username"),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            controller: _passwordCtrl,
-            validator: (val) => _passwordValidator(val),
-            obscureText: !passwordDisplayed,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.lock,
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                  icon: Icon(
-                    passwordDisplayed
-                        ? FontAwesomeIcons.eye
-                        : FontAwesomeIcons.eyeSlash,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      passwordDisplayed = !passwordDisplayed;
-                    });
-                  },
+          RepaintBoundary(
+            child: TextFormField(
+              controller: _usernameCtrl,
+              validator: (val) => _usernameValidator(val),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(
+                  Icons.person,
                 ),
+                hintText: "Enter Username",
+                label: Text("Username"),
               ),
-              hintText: "Enter Password",
-              label: const Text("Password"),
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  BlocProvider.of<AuthBloc>(context).add(
-                    SignInEvent(
-                      params: AuthParams(
-                        email: _usernameCtrl.text,
-                        password: _passwordCtrl.text,
-                      ),
+          RepaintBoundary(
+            child: TextFormField(
+              controller: _passwordCtrl,
+              validator: (val) => _passwordValidator(val),
+              obscureText: !passwordDisplayed,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.lock,
+                ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    icon: Icon(
+                      passwordDisplayed
+                          ? FontAwesomeIcons.eye
+                          : FontAwesomeIcons.eyeSlash,
                     ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                    onPressed: () {
+                      setState(() {
+                        passwordDisplayed = !passwordDisplayed;
+                      });
+                    },
+                  ),
                 ),
+                hintText: "Enter Password",
+                label: const Text("Password"),
               ),
-              child: const Text(
-                "Login",
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          RepaintBoundary(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    BlocProvider.of<AuthBloc>(context).add(
+                      SignInEvent(
+                        params: AuthParams(
+                          email: _usernameCtrl.text,
+                          password: _passwordCtrl.text,
+                        ),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text(
+                  "Login",
+                ),
               ),
             ),
           ),

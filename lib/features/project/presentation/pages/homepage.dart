@@ -49,27 +49,29 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                showGeneralDialog(
-                  context: context,
-                  pageBuilder: (context, anim1, anim2) {
-                    return const ProjectDialogForm();
-                  },
-                  transitionBuilder: (context, anim1, anim2, child) {
-                    return Transform.scale(
-                      scale: anim1.value,
-                      origin: Offset(
-                        MediaQuery.of(context).size.width / 2,
-                        MediaQuery.of(context).size.height / 2,
-                      ),
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 300),
-                );
-              },
-              child: const Icon(Icons.add),
+            floatingActionButton: RepaintBoundary(
+              child: FloatingActionButton(
+                onPressed: () {
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, anim1, anim2) {
+                      return const RepaintBoundary(child: ProjectDialogForm());
+                    },
+                    transitionBuilder: (context, anim1, anim2, child) {
+                      return Transform.scale(
+                        scale: anim1.value,
+                        origin: Offset(
+                          MediaQuery.of(context).size.width / 2,
+                          MediaQuery.of(context).size.height / 2,
+                        ),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 300),
+                  );
+                },
+                child: const Icon(Icons.add),
+              ),
             ),
             body: SizedBox.expand(
               child: LayoutBuilder(
@@ -84,19 +86,25 @@ class HomePage extends StatelessWidget {
                       builder: (context, state) {
                         if (state is LoadingProject) {
                           return const Center(
-                              child: CircularProgressIndicator());
+                            child: RepaintBoundary(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
                         } else if (state is ProjectError) {
                           return CustomErrorWidget(
                               errorMessage: state.errorMessage);
                         }
                         return SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minHeight: boxConstraints.maxHeight,
-                            ),
-                            child: HomePageBody(
-                              projects: (state as ProjectsLoaded).projects,
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: boxConstraints.maxHeight,
+                                // maxWidth: 600,
+                              ),
+                              child: HomePageBody(
+                                projects: (state as ProjectsLoaded).projects,
+                              ),
                             ),
                           ),
                         );

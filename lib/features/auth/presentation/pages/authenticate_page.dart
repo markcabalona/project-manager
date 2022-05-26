@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +6,6 @@ import 'package:todo/core/presentation/routes/routes.dart';
 
 import '../../../../core/presentation/widgets/theme_mode_iconbutton.dart';
 import '../bloc/auth_bloc.dart';
-import 'otp_validation_page.dart';
 import 'sign_in_page.dart';
 import 'sign_up_page.dart';
 
@@ -50,7 +47,8 @@ class AuthenticatePage extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: RepaintBoundary(
+                          child: CircularProgressIndicator(strokeWidth: 2)),
                     ),
                     const SizedBox(width: 20),
                     Expanded(

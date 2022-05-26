@@ -83,25 +83,28 @@ class HomePageBody extends StatelessWidget {
             ),
           );
       }
-      if (state is ProjectsLoaded) {}
     }, builder: (context, state) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Wrap(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           if (activeProjs.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Active Projects",
-                style: Theme.of(context).textTheme.headlineSmall,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Active Projects",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
               ),
             ),
             ...activeProjs.map(
               (activeProj) => Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10.0, bottom: 10.0),
-                child: ProjectTile(project: activeProj),
+                child: RepaintBoundary(child: ProjectTile(project: activeProj)),
               ),
             ),
           ] else ...[
@@ -125,7 +128,7 @@ class HomePageBody extends StatelessWidget {
               (finishedProj) => Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10.0, bottom: 10.0),
-                child: ProjectTile(project: finishedProj),
+                child: RepaintBoundary(child: ProjectTile(project: finishedProj)),
               ),
             )
           ],

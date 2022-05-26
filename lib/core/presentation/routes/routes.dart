@@ -13,7 +13,7 @@ import '../../../features/project/presentation/pages/homepage.dart';
 import '../widgets/error_widget.dart';
 
 class LoginInfo extends ChangeNotifier {
-  bool _isLoggedIn = false;
+  bool _isLoggedIn = FirebaseAuth.instance.currentUser != null;
 
   get isLoggedIn => _isLoggedIn;
 

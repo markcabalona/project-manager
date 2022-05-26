@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -19,6 +20,7 @@ Future<void> main() async {
   await customTheme.initTheme();
 
   di.init();
+  debugRepaintRainbowEnabled = true;
   runApp(
     MultiBlocProvider(
       providers: [
@@ -84,26 +86,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-// class InitialPage extends StatelessWidget {
-//   const InitialPage({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder<User?>(
-//       initialData: FirebaseAuth.instance.currentUser,
-//       stream: FirebaseAuth.instance.authStateChanges(),
-//       builder: (context, snapshot) {
-//         if (snapshot.hasData &&
-//             snapshot.connectionState == ConnectionState.active) {
-//           return HomePage();
-//         }
-//         return const AuthenticatePage(
-//           child: dartz.Left(SignInPage()),
-//         );
-//       },
-//     );
-//   }
-// }

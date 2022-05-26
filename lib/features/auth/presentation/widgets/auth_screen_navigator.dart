@@ -18,9 +18,11 @@ class AuthScreenNavigator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(hint),
-        TextButton(
-          onPressed: callback,
-          child: Text(buttonLabel),
+        RepaintBoundary(
+          child: TextButton(
+            onPressed: callback,
+            child: Text(buttonLabel),
+          ),
         ),
       ],
     );
