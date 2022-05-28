@@ -25,7 +25,7 @@ class CustomErrorWidget extends StatelessWidget {
             ),
             SelectableText(
               errorMessage,
-              // style: const TextStyle(color: kAccentColor),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

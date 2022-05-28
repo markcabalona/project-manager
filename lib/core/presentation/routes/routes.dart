@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../features/auth/presentation/pages/authenticate_page.dart';
@@ -11,7 +8,6 @@ import '../../../features/auth/presentation/pages/otp_validation_page.dart';
 import '../../../features/auth/presentation/pages/sign_in_page.dart';
 import '../../../features/auth/presentation/pages/sign_up_page.dart';
 import '../../../features/project/domain/entities/project.dart';
-import '../../../features/project/presentation/bloc/subtask_bloc.dart';
 import '../../../features/project/presentation/pages/homepage.dart';
 import '../../../features/project/presentation/pages/project_page.dart';
 import '../../login_info.dart';
@@ -40,14 +36,9 @@ final router = GoRouter(
       name: Routes.home.name,
       path: Routes.home.path,
       pageBuilder: (context, state) {
-        try {
-          return const MaterialPage(
-            child: HomePage(),
-          );
-        } catch (e) {
-          return MaterialPage(
-              child: CustomErrorWidget(errorMessage: e.toString()));
-        }
+        return const MaterialPage(
+          child: HomePage(),
+        );
       },
     ),
     GoRoute(
@@ -93,18 +84,16 @@ final router = GoRouter(
       name: Routes.project.name,
       path: Routes.project.pathWithParams('project_id'),
       pageBuilder: (context, state) {
-        BlocProvider.of<SubtaskBloc>(context).add(
-          FetchSubtasksEvent(projectId: state.params['project_id']!),
-        );
         return MaterialPage(
-          child: ProjectPage(project: state.extra as Project),
+          child: ProjectPage(
+            projectParams: state.extra != null ? state.extra as Project : null,
+            projectID: state.params['project_id']!,
+          ),
         );
       },
     ),
   ],
   errorPageBuilder: (context, state) {
-    log(state.path ?? state.location);
-    log(state.error.toString());
     return MaterialPage(
       key: state.pageKey,
       child: const CustomErrorWidget(

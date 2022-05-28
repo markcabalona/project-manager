@@ -1,10 +1,9 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo/core/login_info.dart';
 
 import '../../../../core/errors/exceptions.dart';
-import '../../../../core/presentation/routes/routes.dart';
+import '../../../../core/login_info.dart';
 import '../../domain/entities/project.dart';
 import '../../domain/entities/subtask.dart';
 import '../../domain/usecases/create_project.dart';

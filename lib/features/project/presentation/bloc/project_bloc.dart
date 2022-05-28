@@ -1,6 +1,4 @@
 // ignore: depend_on_referenced_packages
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -43,12 +41,10 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     });
 
     on<FetchProjectsEvent>((event, emit) async {
-      log('fetching');
       emit(LoadingProject());
       final result = await fetchProjects(null);
       result.fold(
         (failure) {
-          log(failure.message);
           emit(ProjectError(errorMessage: failure.message));
           emit(const ProjectsLoaded(projects: []));
         },
