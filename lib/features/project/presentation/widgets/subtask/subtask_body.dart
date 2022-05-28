@@ -1,6 +1,12 @@
+import 'dart:developer';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:todo/features/project/domain/entities/subtask.dart';
+import 'package:todo/features/project/presentation/widgets/subtask/subtask_tile.dart';
 
 import '../../../../../core/presentation/widgets/error_widget.dart';
 import '../../bloc/subtask_bloc.dart';
@@ -12,46 +18,80 @@ class SubtaskBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SubtaskBloc, SubtaskState>(
-      builder: (context, state) {
+    List<Subtask> subtasks = const [];
+
+    return BlocConsumer<SubtaskBloc, SubtaskState>(
+      listener: (context, state) {
         if (state is SubtasksLoaded) {
-          if (state.subtasks.isEmpty) {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.listOl,
-                    size: 64,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "No subtasks yet.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ],
+          subtasks = state.subtasks;
+        }
+        if (state is CreatingSubtask) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text("Creating Subtask"),
               ),
             );
-          } else {
-            return Column(
-              children: const [],
+        }
+        if (state is SubtaskCreated) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text("${state.subtask.title} is created"),
+              ),
             );
-          }
-        } else if (state is SubtaskError) {
-          return CustomErrorWidget(errorMessage: state.errorMessage);
-        } else {
-          return const Center(
-            child: RepaintBoundary(
-              child: CircularProgressIndicator(),
+        }
+        if (state is SubtaskError) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+              ),
+            );
+        }
+      },
+      builder: (context, state) {
+        if (subtasks.isEmpty && state is SubtasksLoaded) {
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FaIcon(
+                  FontAwesomeIcons.listOl,
+                  size: 64,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "No subtasks yet.",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ],
             ),
+          );
+        } else {
+          return Column(
+            children: [
+              ...subtasks.map(
+                (subtask) => Padding(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: SubtaskTile(
+                    subtask: subtask,
+                  ),
+                ),
+              ),
+            ],
           );
         }
       },

@@ -108,17 +108,19 @@ class ProjectPage extends StatelessWidget {
                 child: const Icon(Icons.add),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProjectHeader(project: project!),
-                  ),
-                  const SubtaskBody(),
-                ],
-              ),
-            ),
+            body: LayoutBuilder(builder: (context, boxConstraints) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProjectHeader(project: project!),
+                    ),
+                    const SubtaskBody(),
+                  ],
+                ),
+              );
+            }),
           );
         }
 

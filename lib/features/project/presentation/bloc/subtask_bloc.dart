@@ -29,24 +29,33 @@ class SubtaskBloc extends Bloc<SubtaskEvent, SubtaskState> {
         final result = await fetchSubtasks(event.projectId);
 
         result.fold(
-          (failure) => emit(SubtaskError(errorMessage: failure.message)),
-          (subtasks) => emit(SubtasksLoaded(subtasks: subtasks)),
+          (failure) {
+            emit(SubtaskError(errorMessage: failure.message));
+            emit(const SubtasksLoaded(subtasks: []));
+          },
+          (subtasks) {
+            emit(SubtasksLoaded(subtasks: subtasks));
+          },
         );
       },
     );
 
     on<CreateSubtaskEvent>(
       (event, emit) async {
+        final subtasks = (state as SubtasksLoaded).subtasks;
+
         emit(CreatingSubtask());
         final result = await createSubtask(event.newSubtask);
 
         result.fold(
-          (failure) => emit(
-            SubtaskError(errorMessage: failure.message),
-          ),
-          (subtask) => emit(
-            SubtaskCreated(subtask: subtask),
-          ),
+          (failure) {
+            emit(SubtaskError(errorMessage: failure.message));
+            emit(const SubtasksLoaded(subtasks: []));
+          },
+          (subtask) {
+            emit(SubtaskCreated(subtask: subtask));
+            emit(SubtasksLoaded(subtasks: subtasks..add(subtask)));
+          },
         );
       },
     );

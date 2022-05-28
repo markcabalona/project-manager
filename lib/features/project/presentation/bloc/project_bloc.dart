@@ -24,18 +24,18 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     required this.deleteProject,
   }) : super(LoadingProject()) {
     on<CreateProjectEvent>((event, emit) async {
-      final proj = (state as ProjectsLoaded).projects;
+      final projs = (state as ProjectsLoaded).projects;
 
       final result = await createProject(event.newProj);
 
       result.fold(
         (failure) {
           emit(ProjectError(errorMessage: failure.message));
-          emit(ProjectsLoaded(projects: proj));
+          emit(ProjectsLoaded(projects: projs));
         },
         (project) {
           emit(ProjectCreated(newProject: project));
-          emit(ProjectsLoaded(projects: proj..add(project)));
+          emit(ProjectsLoaded(projects: projs..add(project)));
         },
       );
     });
