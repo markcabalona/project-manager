@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todo/features/project/domain/entities/subtask.dart';
 import 'package:todo/features/project/presentation/widgets/subtask/subtask_tile.dart';
 
-import '../../../../../core/presentation/widgets/error_widget.dart';
 import '../../bloc/subtask_bloc.dart';
 
 class SubtaskBody extends StatelessWidget {
@@ -22,6 +18,46 @@ class SubtaskBody extends StatelessWidget {
 
     return BlocConsumer<SubtaskBloc, SubtaskState>(
       listener: (context, state) {
+        switch (state.runtimeType) {
+          case UpdatingSubtask:
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text("Updating Subtask"),
+                ),
+              );
+            break;
+          case SubtaskUpdated:
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text("Subtask Updated"),
+                ),
+              );
+            break;
+          case DeletingSubtask:
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text("Deleting Subtask"),
+                ),
+              );
+            break;
+          case SubtaskDeleted:
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text("Subtask Deleted"),
+                ),
+              );
+            break;
+          default:
+        }
+
         if (state is SubtasksLoaded) {
           subtasks = state.subtasks;
         }
@@ -80,7 +116,9 @@ class SubtaskBody extends StatelessWidget {
             ),
           );
         } else {
-          return Column(
+          return Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ...subtasks.map(
                 (subtask) => Padding(

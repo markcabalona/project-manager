@@ -6,7 +6,6 @@ import '../../domain/entities/project.dart';
 import '../bloc/project_bloc.dart';
 import 'project/project_tile.dart';
 
-
 class HomePageBody extends StatelessWidget {
   final List<Project> projects;
   const HomePageBody({
@@ -85,7 +84,6 @@ class HomePageBody extends StatelessWidget {
       }
     }, builder: (context, state) {
       return Wrap(
-        // mainAxisAlignment: MainAxisAlignment.center,
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
@@ -128,7 +126,8 @@ class HomePageBody extends StatelessWidget {
               (finishedProj) => Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10.0, bottom: 10.0),
-                child: RepaintBoundary(child: ProjectTile(project: finishedProj)),
+                child:
+                    RepaintBoundary(child: ProjectTile(project: finishedProj)),
               ),
             )
           ],

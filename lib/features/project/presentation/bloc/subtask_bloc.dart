@@ -59,5 +59,51 @@ class SubtaskBloc extends Bloc<SubtaskEvent, SubtaskState> {
         );
       },
     );
+    on<UpdateSubtaskEvent>(
+      (event, emit) async {
+        final subtasks = (state as SubtasksLoaded).subtasks;
+
+        emit(UpdatingSubtask());
+        final result = await updateSubtask(event.subtask);
+
+        result.fold(
+          (failure) {
+            emit(SubtaskError(errorMessage: failure.message));
+            emit(const SubtasksLoaded(subtasks: []));
+          },
+          (subtask) {
+            subtasks[subtasks.indexOf(event.subtask)] = subtask;
+            emit(SubtaskUpdated(subtask: subtask));
+            emit(SubtasksLoaded(subtasks: subtasks));
+          },
+        );
+      },
+    );
+    on<DeleteSubtaskEvent>(
+      (event, emit) async {
+        final subtasks = (state as SubtasksLoaded).subtasks;
+
+        emit(DeletingSubtask());
+        final result = await deleteSubtask(event.subtaskID);
+
+        result.fold(
+          (failure) {
+            emit(SubtaskError(errorMessage: failure.message));
+            emit(const SubtasksLoaded(subtasks: []));
+          },
+          (subtask) {
+            emit(SubtaskDeleted());
+            emit(
+              SubtasksLoaded(
+                subtasks: subtasks
+                  ..removeWhere(
+                    (subtask) => subtask.id == event.subtaskID,
+                  ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

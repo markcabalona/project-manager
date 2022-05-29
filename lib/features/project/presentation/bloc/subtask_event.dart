@@ -26,3 +26,23 @@ class CreateSubtaskEvent extends SubtaskEvent {
   @override
   List<Object> get props => super.props..add(newSubtask);
 }
+
+class UpdateSubtaskEvent extends SubtaskEvent {
+  final Subtask subtask;
+  const UpdateSubtaskEvent({
+    required this.subtask,
+  });
+
+  @override
+  List<Object> get props => super.props..add(subtask);
+}
+
+class DeleteSubtaskEvent extends SubtaskEvent {
+  final String subtaskID;
+  const DeleteSubtaskEvent({
+    required this.subtaskID,
+  });
+
+  @override
+  List<Object> get props => super.props..add(subtaskID);
+}
