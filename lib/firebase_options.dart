@@ -23,7 +23,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -36,31 +39,23 @@ class DefaultFirebaseOptions {
     }
   }
 
+
+// 1017049445765-2qad1mk3m02bddav7sm534mel05q61v1.apps.googleusercontent.com
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyALtpzju4dbRxiyjhAR4X3Sx6MGJtmn2ic',
-    appId: '1:1017049445765:web:0b3b44a3a55812829d00ec',
+    appId: '1:1017049445765:web:d583a243f2cbcfdd9d00ec',
     messagingSenderId: '1017049445765',
     projectId: 'todo-c7ab5',
     authDomain: 'todo-c7ab5.firebaseapp.com',
     storageBucket: 'todo-c7ab5.appspot.com',
-    measurementId: 'G-71H6DFKPDQ',
+    measurementId: 'G-8PYNK4H6EP',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBInyXmy1sjSJeMddxKTPF1lgIvYQuINB8',
-    appId: '1:1017049445765:android:916e234c752774d29d00ec',
+    appId: '1:1017049445765:android:59878164af3b02f09d00ec',
     messagingSenderId: '1017049445765',
     projectId: 'todo-c7ab5',
     storageBucket: 'todo-c7ab5.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAycnJTZTC4qB8Px2Lc9RCEUhCeyjwAlZ4',
-    appId: '1:1017049445765:ios:74e51c09ea21a8799d00ec',
-    messagingSenderId: '1017049445765',
-    projectId: 'todo-c7ab5',
-    storageBucket: 'todo-c7ab5.appspot.com',
-    iosClientId: '1017049445765-ceu9ju316vn3trlvq5l8jp852vrvac6e.apps.googleusercontent.com',
-    iosBundleId: 'com.example.todo',
   );
 }
